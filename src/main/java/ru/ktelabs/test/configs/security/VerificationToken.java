@@ -1,7 +1,6 @@
 package ru.ktelabs.test.configs.security;
 
 import jakarta.persistence.*;
-import ru.kuznetsov.bikeService.models.users.UserModel;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
