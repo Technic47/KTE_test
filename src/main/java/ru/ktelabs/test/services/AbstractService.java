@@ -11,7 +11,7 @@ import java.util.UUID;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
         implements CommonService<E> {
-    private final R repository;
+    protected final R repository;
 
     public AbstractService(R repository) {
         this.repository = repository;

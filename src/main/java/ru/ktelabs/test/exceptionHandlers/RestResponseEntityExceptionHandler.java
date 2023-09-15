@@ -15,8 +15,8 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
-import ru.kuznetsov.bikeService.customExceptions.AccessToResourceDenied;
-import ru.kuznetsov.bikeService.customExceptions.ResourceNotFoundException;
+import ru.ktelabs.test.customExceptions.AccessToResourceDenied;
+import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,7 +25,6 @@ import java.util.Objects;
 @RestControllerAdvice
 public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionHandler {
     @ExceptionHandler(ResourceNotFoundException.class)
-//    @ResponseStatus(HttpStatus.NOT_FOUND)
     protected ResponseEntity<Object> handleResourceNotFound(ResourceNotFoundException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         ApiError apiError =
@@ -35,7 +34,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(AccessToResourceDenied.class)
-//    @ResponseStatus(HttpStatus.FORBIDDEN)
     protected ResponseEntity<Object> handleResourceAccessDenied(AccessToResourceDenied ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         ApiError apiError =
@@ -45,7 +43,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     protected ResponseEntity<Object> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         String bodyOfResponse = ex.getMessage();
         ApiError apiError =
@@ -55,7 +52,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({ConstraintViolationException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleConstraintViolation(
             ConstraintViolationException ex) {
         List<String> errors = new ArrayList<>();
@@ -71,7 +67,6 @@ public class RestResponseEntityExceptionHandler extends ResponseEntityExceptionH
     }
 
     @ExceptionHandler({MethodArgumentTypeMismatchException.class})
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ResponseEntity<Object> handleMethodArgumentTypeMismatch(
             MethodArgumentTypeMismatchException ex) {
         String error =

@@ -8,7 +8,7 @@ import ru.ktelabs.test.services.CabinetService;
 
 @Tag(name = "Cabinets", description = "The Cabinet API")
 @RestController
-@RequestMapping("/api/cabinets")
+@RequestMapping("/api/users/cabinets")
 public class CabinetController extends AbstractController<Cabinet, CabinetService> {
     public CabinetController(CabinetService service) {
         super(service);

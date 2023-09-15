@@ -20,6 +20,7 @@ public class AbstractEntity {
     }
 
     public AbstractEntity() {
+        this.uuid = UUID.randomUUID();
     }
 
     public Long getId() {

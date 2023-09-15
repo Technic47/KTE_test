@@ -8,7 +8,7 @@ import ru.ktelabs.test.services.TimeSlotService;
 
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
-@RequestMapping("/api/timeSlots")
+@RequestMapping("/api/users/timeSlots")
 public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotService> {
     protected TimeSlotController(TimeSlotService service) {
         super(service);

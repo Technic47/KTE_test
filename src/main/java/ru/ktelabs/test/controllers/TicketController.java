@@ -8,7 +8,7 @@ import ru.ktelabs.test.services.TicketService;
 
 @Tag(name = "Tickets", description = "The Ticket API")
 @RestController
-@RequestMapping("/api/tickets")
+@RequestMapping("/api/users/tickets")
 public class TicketController extends AbstractController<Ticket, TicketService> {
     protected TicketController(TicketService service) {
         super(service);

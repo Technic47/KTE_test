@@ -1,18 +1,16 @@
 package ru.ktelabs.test.configs.security;
 
 import jakarta.persistence.*;
+import ru.ktelabs.test.models.AbstractEntity;
+import ru.ktelabs.test.models.users.UserModel;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Date;
 
 @Entity
-public class VerificationToken {
+public class VerificationToken extends AbstractEntity {
     private static final int EXPIRATION = 60 * 24;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
 
     private String token;
 
@@ -40,14 +38,6 @@ public class VerificationToken {
         cal.setTime(new Timestamp(cal.getTime().getTime()));
         cal.add(Calendar.MINUTE, EXPIRATION);
         return new Date(cal.getTime().getTime());
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
     }
 
     public String getToken() {

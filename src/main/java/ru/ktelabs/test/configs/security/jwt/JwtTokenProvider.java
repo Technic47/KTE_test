@@ -12,7 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Component;
-import ru.kuznetsov.bikeService.models.users.UserRole;
+import ru.ktelabs.test.models.users.UserRole;
 
 import java.util.*;
 
@@ -66,14 +66,8 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-//        try {
         Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
         return !claims.getBody().getExpiration().before(new Date());
-//        } catch (JwtException | IllegalArgumentException e) {
-//            throw new JwtAuthenticationException("JWT token is expired or invalid");
-//        } catch (ExpiredJwtException ex){
-//            throw new JwtAuthenticationException(ex.getMessage());
-//        }
     }
 
     private List<String> getRoleNames(Set<UserRole> userRoles) {

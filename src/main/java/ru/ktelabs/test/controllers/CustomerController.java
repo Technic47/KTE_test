@@ -8,7 +8,7 @@ import ru.ktelabs.test.services.CustomerService;
 
 @Tag(name = "Customers", description = "The Customer API")
 @RestController
-@RequestMapping("/api/customers")
+@RequestMapping("/api/users/customers")
 public class CustomerController extends AbstractController<Customer, CustomerService> {
     protected CustomerController(CustomerService service) {
         super(service);

@@ -34,6 +34,8 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             errorMessage = "Токен просрочен.";
         } else if (exception.getMessage().contains("JWT expired")) {
             errorMessage = "JWT токен просрочен.";
+        } else if (exception.getMessage().contains("JEmail exists")) {
+            errorMessage = "Email уже существует.";
         }
 
         request.getSession().setAttribute(WebAttributes.AUTHENTICATION_EXCEPTION, errorMessage);
