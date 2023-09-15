@@ -9,6 +9,7 @@ import java.util.Calendar;
 public class TimeSlot extends AbstractEntity{
     private Calendar startTime;
     private Calendar finishTime;
+    private boolean occupied;
     @Transient
     private int duration;
 
@@ -40,5 +41,13 @@ public class TimeSlot extends AbstractEntity{
     public int getDuration() {
         this.duration = finishTime.compareTo(startTime);
         return duration;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 }

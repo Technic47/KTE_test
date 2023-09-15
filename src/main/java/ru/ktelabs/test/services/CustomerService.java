@@ -1,10 +1,12 @@
 package ru.ktelabs.test.services;
 
+import org.springframework.stereotype.Service;
 import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.repositories.CustomerRepository;
 
 import java.util.Calendar;
 
+@Service
 public class CustomerService extends HumanModelService<Customer, CustomerRepository> {
     public CustomerService(CustomerRepository repository) {
         super(repository);

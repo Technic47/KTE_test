@@ -1,8 +1,10 @@
 package ru.ktelabs.test.services;
 
+import org.springframework.stereotype.Service;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.repositories.TicketRepository;
 
+@Service
 public class TicketService extends AbstractService<Ticket, TicketRepository> {
     public TicketService(TicketRepository repository) {
         super(repository);
