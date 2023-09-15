@@ -10,23 +10,12 @@ import java.util.Set;
 import java.util.UUID;
 
 @Entity
-public class Customer extends HumanModel{
-    @OneToMany
-    private Set<Ticket> tickets;
-
+public class Customer extends HumanModel implements TicketHandler{
     public Customer(Long id, String firstName, String secondName, String givenName, Calendar birthDate) {
         super(id, firstName, secondName, givenName, birthDate);
     }
 
     public Customer() {
         super();
-    }
-
-    public Set<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(Set<Ticket> tickets) {
-        this.tickets = tickets;
     }
 }

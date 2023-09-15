@@ -8,7 +8,7 @@ import java.util.Set;
 public class Cabinet extends AbstractEntity {
     private int number;
     @OneToMany
-    private Set<Ticket> ticket;
+    private Set<Ticket> tickets;
 
     public Cabinet(Long id, int number) {
         super(id);
@@ -22,11 +22,15 @@ public class Cabinet extends AbstractEntity {
         return number;
     }
 
-    public Set<Ticket> getTicket() {
-        return ticket;
+    public void setNumber(int number) {
+        this.number = number;
     }
 
-    public void setTicket(Set<Ticket> ticket) {
-        this.ticket = ticket;
+    public Set<Ticket> getTickets() {
+        return tickets;
+    }
+
+    public void setTickets(Set<Ticket> ticket) {
+        this.tickets = ticket;
     }
 }

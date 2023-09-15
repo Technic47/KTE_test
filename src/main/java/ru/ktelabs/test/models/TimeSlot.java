@@ -22,15 +22,23 @@ public class TimeSlot extends AbstractEntity{
     }
 
     public Calendar getStartTime() {
-        this.duration = finishTime.compareTo(startTime);
         return startTime;
+    }
+
+    public void setStartTime(Calendar startTime) {
+        this.startTime = startTime;
     }
 
     public Calendar getFinishTime() {
         return finishTime;
     }
 
+    public void setFinishTime(Calendar finishTime) {
+        this.finishTime = finishTime;
+    }
+
     public int getDuration() {
+        this.duration = finishTime.compareTo(startTime);
         return duration;
     }
 }

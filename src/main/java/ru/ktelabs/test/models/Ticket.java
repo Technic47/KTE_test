@@ -26,12 +26,35 @@ public class Ticket extends AbstractEntity {
     public Ticket() {
     }
 
-
     public Doctor getDoctor() {
         return doctor;
     }
 
+    public void setDoctor(Doctor doctor) {
+        this.doctor = doctor;
+    }
+
     public Customer getCustomer() {
         return customer;
+    }
+
+    public void setCustomer(Customer customer) {
+        this.customer = customer;
+    }
+
+    public Cabinet getCabinet() {
+        return cabinet;
+    }
+
+    public void setCabinet(Cabinet cabinet) {
+        this.cabinet = cabinet;
+    }
+
+    public TimeSlot getTimeSlot() {
+        return timeSlot;
+    }
+
+    public void setTimeSlot(TimeSlot timeSlot) {
+        this.timeSlot = timeSlot;
     }
 }

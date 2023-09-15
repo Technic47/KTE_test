@@ -10,8 +10,7 @@ import java.util.Set;
 @Entity
 public class Doctor extends HumanModel {
     private String speciality;
-    @OneToMany
-    private Set<Ticket> tickets;
+
 
     public Doctor(Long id, String firstName, String secondName, String givenName, Calendar birthDate) {
         super(id, firstName, secondName, givenName, birthDate);
@@ -29,11 +28,4 @@ public class Doctor extends HumanModel {
         this.speciality = speciality;
     }
 
-    public Set<Ticket> getTickets() {
-        return tickets;
-    }
-
-    public void setTickets(Set<Ticket> tickets) {
-        this.tickets = tickets;
-    }
 }
