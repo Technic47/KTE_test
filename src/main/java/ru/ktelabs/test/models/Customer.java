@@ -11,8 +11,12 @@ import java.util.UUID;
 
 @Entity
 public class Customer extends HumanModel implements TicketHandler{
-    public Customer(Long id, String firstName, String secondName, String givenName, Calendar birthDate) {
-        super(id, firstName, secondName, givenName, birthDate);
+    public Customer(String firstName, String secondName, String givenName, Calendar birthDate) {
+        super(firstName, secondName, givenName, birthDate);
+    }
+
+    public Customer(Long id, UUID uuid, String firstName, String secondName, String givenName, Calendar birthDate, int age, Calendar created, Calendar updated, Set<Ticket> tickets) {
+        super(id, uuid, firstName, secondName, givenName, birthDate, age, created, updated, tickets);
     }
 
     public Customer() {

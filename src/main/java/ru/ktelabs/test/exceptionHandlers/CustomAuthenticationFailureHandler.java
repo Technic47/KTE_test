@@ -14,13 +14,13 @@ import java.io.IOException;
 public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationFailureHandler {
     @Override
     public void onAuthenticationFailure(HttpServletRequest request,
-                                        HttpServletResponse response, AuthenticationException exception)
+                                        HttpServletResponse response,
+                                        AuthenticationException exception)
             throws IOException, ServletException {
-        setDefaultFailureUrl("/login?error=true");
-
         super.onAuthenticationFailure(request, response, exception);
 
         String errorMessage = "Неправильные имя и пароль.";
+
 
         if (exception.getMessage().contains("User is disabled")) {
             errorMessage = "Пользователь не активирован.";
@@ -34,7 +34,7 @@ public class CustomAuthenticationFailureHandler extends SimpleUrlAuthenticationF
             errorMessage = "Токен просрочен.";
         } else if (exception.getMessage().contains("JWT expired")) {
             errorMessage = "JWT токен просрочен.";
-        } else if (exception.getMessage().contains("JEmail exists")) {
+        } else if (exception.getMessage().contains("Email exists")) {
             errorMessage = "Email уже существует.";
         }
 

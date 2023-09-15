@@ -3,6 +3,7 @@ package ru.ktelabs.test.models;
 import jakarta.persistence.*;
 
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class Cabinet extends AbstractEntity {
@@ -10,9 +11,15 @@ public class Cabinet extends AbstractEntity {
     @OneToMany
     private Set<Ticket> tickets;
 
-    public Cabinet(Long id, int number) {
-        super(id);
+    public Cabinet(int number) {
+        super();
         this.number = number;
+    }
+
+    public Cabinet(Long id, UUID uuid, int number, Set<Ticket> tickets) {
+        super(id, uuid);
+        this.number = number;
+        this.tickets = tickets;
     }
 
     public Cabinet() {

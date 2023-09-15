@@ -18,7 +18,7 @@ import java.util.Map;
 
 public abstract class AbstractController<E extends AbstractEntity,
         S extends CommonService<E>> {
-    private final S service;
+    protected final S service;
 
     protected AbstractController(S service) {
         this.service = service;

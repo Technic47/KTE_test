@@ -1,9 +1,6 @@
 package ru.ktelabs.test.configs.security.jwt;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import io.jsonwebtoken.*;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Value;
@@ -66,8 +63,12 @@ public class JwtTokenProvider {
     }
 
     public boolean validateToken(String token) {
-        Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
-        return !claims.getBody().getExpiration().before(new Date());
+        try {
+            Jws<Claims> claims = Jwts.parser().setSigningKey(secret).parseClaimsJws(token);
+            return !claims.getBody().getExpiration().before(new Date());
+        } catch(Exception e) {
+          throw new MalformedJwtException(e.getMessage());
+        }
     }
 
     private List<String> getRoleNames(Set<UserRole> userRoles) {

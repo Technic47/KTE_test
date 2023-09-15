@@ -14,9 +14,9 @@ public class AbstractEntity {
     private Long id;
     private UUID uuid;
 
-    public AbstractEntity(Long id) {
+    public AbstractEntity(Long id, UUID uuid) {
         this.id = id;
-        this.uuid = UUID.randomUUID();
+        this.uuid = uuid;
     }
 
     public AbstractEntity() {

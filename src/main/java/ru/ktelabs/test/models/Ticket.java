@@ -3,6 +3,8 @@ package ru.ktelabs.test.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 
+import java.util.UUID;
+
 @Entity
 public class Ticket extends AbstractEntity {
     @ManyToOne
@@ -15,8 +17,16 @@ public class Ticket extends AbstractEntity {
     @ManyToOne
     private TimeSlot timeSlot;
 
-    public Ticket(Long id, Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
-        super(id);
+    public Ticket(Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
+        super();
+        this.doctor = doctor;
+        this.customer = customer;
+        this.cabinet = cabinet;
+        this.timeSlot = timeSlot;
+    }
+
+    public Ticket(Long id, UUID uuid, Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
+        super(id, uuid);
         this.doctor = doctor;
         this.customer = customer;
         this.cabinet = cabinet;

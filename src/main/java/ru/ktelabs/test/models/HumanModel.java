@@ -7,6 +7,7 @@ import jakarta.persistence.Transient;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
+import java.util.UUID;
 
 @MappedSuperclass
 public class HumanModel extends AbstractEntity implements TicketHandler {
@@ -29,14 +30,26 @@ public class HumanModel extends AbstractEntity implements TicketHandler {
         this.created = Calendar.getInstance();
     }
 
-    public HumanModel(Long id, String firstName, String secondName, String givenName, Calendar birthDate) {
-        super(id);
+    public HumanModel(String firstName, String secondName, String givenName, Calendar birthDate) {
+        super();
         this.firstName = firstName;
         this.secondName = secondName;
         this.givenName = givenName;
         this.birthDate = birthDate;
         this.created = Calendar.getInstance();
         this.age = new GregorianCalendar().get(Calendar.YEAR) - birthDate.get((Calendar.YEAR));
+    }
+
+    public HumanModel(Long id, UUID uuid, String firstName, String secondName, String givenName, Calendar birthDate, int age, Calendar created, Calendar updated, Set<Ticket> tickets) {
+        super(id, uuid);
+        this.firstName = firstName;
+        this.secondName = secondName;
+        this.givenName = givenName;
+        this.birthDate = birthDate;
+        this.age = age;
+        this.created = created;
+        this.updated = updated;
+        this.tickets = tickets;
     }
 
     public String getFirstName() {
