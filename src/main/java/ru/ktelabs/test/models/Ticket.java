@@ -2,6 +2,7 @@ package ru.ktelabs.test.models;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 
 import java.util.UUID;
 
@@ -13,8 +14,7 @@ public class Ticket extends AbstractEntity {
     private Customer customer;
     @ManyToOne
     private Cabinet cabinet;
-
-    @ManyToOne
+    @OneToOne
     private TimeSlot timeSlot;
 
     public Ticket(Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {

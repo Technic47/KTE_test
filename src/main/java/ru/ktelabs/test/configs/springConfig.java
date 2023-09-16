@@ -11,6 +11,8 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.sql.DataSource;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 @Configuration
 @ComponentScan("ru.ktelabs.test")
@@ -35,5 +37,11 @@ public class springConfig implements WebMvcConfigurer {
         dataSource.setUsername(username);
         dataSource.setPassword(password);
         return dataSource;
+    }
+
+    @Bean
+    public ExecutorService setExecutor() {
+        int numOfCores = Runtime.getRuntime().availableProcessors();
+        return Executors.newFixedThreadPool(numOfCores / 4);
     }
 }
