@@ -16,6 +16,8 @@ public class TimeSlot extends AbstractEntity {
     private Calendar startTime;
     private Calendar finishTime;
 
+    private boolean occupied;
+
     public TimeslotDTO toDTO() throws DatatypeConfigurationException {
         TimeslotDTO dto = new TimeslotDTO();
         XMLGregorianCalendar startXML = DatatypeFactory.newInstance().newXMLGregorianCalendar((GregorianCalendar) startTime);
@@ -29,15 +31,18 @@ public class TimeSlot extends AbstractEntity {
         super();
         this.startTime = startTime;
         this.finishTime = finishTime;
+        this.occupied = false;
     }
 
-    public TimeSlot(Long id, UUID uuid, Calendar startTime, Calendar finishTime) {
+    public TimeSlot(Long id, UUID uuid, Calendar startTime, Calendar finishTime, boolean occupied) {
         super(id, uuid);
         this.startTime = startTime;
         this.finishTime = finishTime;
+        this.occupied = occupied;
     }
 
     public TimeSlot() {
+        this.occupied = false;
     }
 
     public Calendar getStartTime() {

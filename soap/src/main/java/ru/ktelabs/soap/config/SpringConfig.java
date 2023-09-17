@@ -1,4 +1,4 @@
-package ru.ktelabs.soap;
+package ru.ktelabs.soap.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
@@ -16,7 +16,7 @@ import java.util.concurrent.Executors;
 @Configuration
 @ComponentScan("ru.ktelabs.soap")
 @EnableJpaRepositories("ru.ktelabs.soap.repositories")
-@EntityScan("ru.ktelabs.test.models")
+@EntityScan("ru.ktelabs.soap.models")
 @EnableWebMvc
 public class SpringConfig {
     @Value("${datasource.driver}")

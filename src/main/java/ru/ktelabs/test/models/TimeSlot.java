@@ -31,6 +31,7 @@ public class TimeSlot extends AbstractEntity {
     }
 
     public TimeSlot() {
+        this.occupied = false;
     }
 
     public Calendar getStartTime() {
