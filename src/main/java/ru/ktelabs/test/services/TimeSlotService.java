@@ -6,12 +6,10 @@ import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.repositories.TimeSlotRepository;
 
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+import java.util.stream.Collectors;
 
 import static java.util.Calendar.*;
 
@@ -80,6 +78,13 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         return save(timeSlot);
     }
 
+    public List<TimeSlot> getFreeSlotsForDoctor(Long doctorId, Calendar date) {
+        List<TimeSlot> slots = repository.findByOccupiedAndStartTimeAfter(false, date);
+        return slots.stream()
+                .filter(slot -> slot.getTicket()
+                        .getDoctor().getId().equals(doctorId)).toList();
+    }
+
     /**
      * Generation strategy:
      * If no year, no month, no day present - generator will produce TimeSlots for current date.
@@ -91,12 +96,25 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
      * @param month         set month for generation whole month.
      * @param day           set day for generation whole day.
      * @param periodMinutes period for generation.
-     * @return List of TimeSlots.
+     * @return List of generated slots.
      */
     public List<TimeSlot> generateSlots(Integer year, Integer month, Integer day, Integer periodMinutes) throws ExecutionException, InterruptedException {
+        if (year <= 0) {
+            throw new IllegalArgumentException("Parameter 'year' is set incorrectly");
+        }
+        if (month <= 0 || month > 12) {
+            throw new IllegalArgumentException("Parameter 'month' is set incorrectly");
+        }
+        if (day <= 0 || day > 31) {
+            throw new IllegalArgumentException("Parameter 'day' is set incorrectly");
+        }
+        if (periodMinutes <= 0) {
+            throw new IllegalArgumentException("Parameter 'periodMinutes' is set incorrectly");
+        }
         return this.doGeneration(year, month, day, periodMinutes);
     }
 
+    //main logic of TimeSlots generation
     private List<TimeSlot> doGeneration(Integer year, Integer month, Integer day, Integer periodMinutes) throws ExecutionException, InterruptedException {
         periodMinutes = periodMinutes != null ? periodMinutes : STANDARD_PERIOD;
 
@@ -118,7 +136,6 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     private List<TimeSlot> generateForYear(int year, int periodMinutes) throws ExecutionException, InterruptedException {
         List<TimeSlot> slotList = new ArrayList<>();
         for (int i = 1; i < 12; i++) {
-
             int finalI = i;
             slotList.addAll(executor.submit(() -> generateForMonth(year, finalI, periodMinutes)).get());
         }
@@ -130,7 +147,6 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
             YearMonth yearMonth = YearMonth.of(year, month);
             int days = yearMonth.lengthOfMonth();
             List<TimeSlot> slotList = new ArrayList<>();
-
             for (int i = 1; i < days; i++) {
                 slotList.addAll(generateForDay(year, month, i, periodMinutes));
             }
@@ -138,6 +154,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         }).get();
     }
 
+    //generation logic for 1 day
     private List<TimeSlot> generateForDay(int year, int month, int day, int periodMinutes) {
         List<TimeSlot> slotList = new ArrayList<>();
         int periodHours = 0;

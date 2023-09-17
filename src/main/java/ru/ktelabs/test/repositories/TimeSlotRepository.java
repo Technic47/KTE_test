@@ -11,4 +11,5 @@ public interface TimeSlotRepository extends CommonRepository<TimeSlot> {
     List<TimeSlot> findByStartTimeAfterAndFinishTimeBefore(Calendar startTime, Calendar finishTime);
     boolean existsByStartTimeAfterAndFinishTimeBefore(Calendar startTime, Calendar finishTime);
     boolean existsByStartTimeAndFinishTime(Calendar startTime, Calendar finishTime);
+    List<TimeSlot> findByOccupiedAndStartTimeAfter(boolean occupied, Calendar time);
 }

@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.services.TimeSlotService;
 
+import javax.xml.crypto.Data;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -60,5 +64,19 @@ public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotSer
                                               @PathVariable Long ticketId) {
         TimeSlot slot = service.setTicket(slotId, ticketId);
         return ResponseEntity.ok(slot);
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<TimeSlot>> freeSlotsForDoctor(
+            @PathVariable Long doctorId,
+            @RequestParam(name = "year", required = false) Integer year,
+            @RequestParam(name = "month", required = false) Integer month,
+            @RequestParam(name = "day", required = false) Integer day) {
+        Calendar date = new GregorianCalendar();
+        date.set(Calendar.YEAR, year);
+        date.set(Calendar.MONTH, month - 1);
+        date.set(Calendar.DAY_OF_WEEK, day);
+        return ResponseEntity.ok(service.getFreeSlotsForDoctor(doctorId, date));
+
     }
 }
