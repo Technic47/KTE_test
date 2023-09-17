@@ -19,7 +19,7 @@ import java.util.concurrent.Executors;
 @EnableJpaRepositories("ru.ktelabs.test.repositories")
 @EntityScan("ru.ktelabs.test.models")
 @EnableWebMvc
-public class springConfig implements WebMvcConfigurer {
+public class SpringConfig implements WebMvcConfigurer {
     @Value("${datasource.driver}")
     private String driver;
     @Value("${spring.datasource.url}")
