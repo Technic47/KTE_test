@@ -1,0 +1,29 @@
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:tns="http://ktelabs.ru/soap/ws"
+           targetNamespace="http://ktelabs.ru/soap/ws" elementFormDefault="qualified">
+
+    <xs:element name="generateTimeSlotsRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="year" type="xs:integer"/>
+                <xs:element name="month" type="xs:integer"/>
+                <xs:element name="day" type="xs:integer"/>
+                <xs:element name="periodMinutes" type="xs:integer"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="generateTimeSlotsResponse">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="timeSlots" type="tns:timeslotDTO" minOccurs="0" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="timeslotDTO">
+        <xs:sequence>
+            <xs:element name="startTime" type="xs:dateTime"/>
+            <xs:element name="finishTime" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>
