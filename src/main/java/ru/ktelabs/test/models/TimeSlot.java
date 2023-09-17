@@ -1,6 +1,9 @@
 package ru.ktelabs.test.models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 
 import java.util.Calendar;
 import java.util.UUID;
@@ -8,7 +11,11 @@ import java.util.UUID;
 @Entity
 @Table(uniqueConstraints = {@UniqueConstraint(columnNames = {"startTime", "finishTime"})})
 public class TimeSlot extends AbstractEntity {
+    @NotNull
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar startTime;
+    @NotNull
+    @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar finishTime;
     @OneToOne
     private Ticket ticket;
@@ -32,6 +39,12 @@ public class TimeSlot extends AbstractEntity {
 
     public TimeSlot() {
         this.occupied = false;
+    }
+
+    public TimeSlot(TimeSlotDTO dto){
+        super();
+        this.startTime = dto.getStartTime();
+        this.finishTime = dto.getFinishTime();
     }
 
     public Calendar getStartTime() {

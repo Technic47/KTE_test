@@ -24,6 +24,9 @@ public class UserDto {
         this.authorities = userModel.getAuthorities();
     }
 
+    public UserDto() {
+    }
+
     public String getUsername() {
         return username;
     }

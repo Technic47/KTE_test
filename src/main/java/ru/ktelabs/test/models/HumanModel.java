@@ -1,56 +1,75 @@
 package ru.ktelabs.test.models;
 
-import jakarta.persistence.MappedSuperclass;
-import jakarta.persistence.OneToMany;
-import jakarta.persistence.Transient;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.AbstractDto;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Set;
 import java.util.UUID;
 
+import static ru.ktelabs.test.models.Gender.UNKNOWN;
+
 @MappedSuperclass
 public class HumanModel extends AbstractEntity implements TicketHandler {
-    private String firstName;
-    private String secondName;
-    private String givenName;
-    private Calendar birthDate;
+    @NotNull
+    protected String firstName;
+    @NotNull
+    protected String secondName;
+    protected String givenName;
+    @NotNull
+    @JsonProperty(value = "type")
+    @Enumerated(EnumType.STRING)
+    protected Gender gender;
+    @JsonFormat(pattern = "yyyy-MM-DD")
+    protected Calendar birthDate;
     @Transient
-    private int age;
-    private Calendar created;
-    private Calendar updated;
+    protected int age;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Calendar created;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    protected Calendar updated;
 
     @OneToMany
-    private Set<Ticket> tickets;
+    protected Set<Ticket> tickets;
 
     public HumanModel() {
+        super();
         this.firstName = "empty";
         this.secondName = "empty";
         this.givenName = "empty";
+        this.gender = UNKNOWN;
         this.created = Calendar.getInstance();
     }
 
-    public HumanModel(String firstName, String secondName, String givenName, Calendar birthDate) {
+    public HumanModel(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate) {
         super();
         this.firstName = firstName;
         this.secondName = secondName;
         this.givenName = givenName;
+        this.gender = gender;
         this.birthDate = birthDate;
         this.created = Calendar.getInstance();
         this.age = new GregorianCalendar().get(Calendar.YEAR) - birthDate.get((Calendar.YEAR));
     }
 
-    public HumanModel(Long id, UUID uuid, String firstName, String secondName, String givenName, Calendar birthDate, int age, Calendar created, Calendar updated, Set<Ticket> tickets) {
+    public HumanModel(Long id, UUID uuid, String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, int age, Calendar created, Calendar updated, Set<Ticket> tickets) {
         super(id, uuid);
         this.firstName = firstName;
         this.secondName = secondName;
         this.givenName = givenName;
+        this.gender = gender;
         this.birthDate = birthDate;
         this.age = age;
         this.created = created;
         this.updated = updated;
         this.tickets = tickets;
     }
+
+
 
     public String getFirstName() {
         return firstName;
@@ -74,6 +93,14 @@ public class HumanModel extends AbstractEntity implements TicketHandler {
 
     public void setGivenName(String givenName) {
         this.givenName = givenName;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public Calendar getBirthDate() {

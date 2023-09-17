@@ -8,7 +8,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.AbstractDto;
+import ru.ktelabs.test.models.dto.DoctorDTO;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.services.TimeSlotService;
 
 import javax.xml.crypto.Data;
@@ -22,9 +26,14 @@ import java.util.concurrent.ExecutionException;
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
 @RequestMapping("/api/users/timeSlots")
-public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotService> {
+public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotService, TimeSlotDTO> {
     protected TimeSlotController(TimeSlotService service) {
         super(service);
+    }
+
+    @Override
+    public ResponseEntity<TimeSlot> create(@RequestBody TimeSlotDTO newDTO) {
+        return ResponseEntity.ok(service.save(new TimeSlot(newDTO)));
     }
 
     @Operation(summary = "Generate slots")

@@ -4,6 +4,14 @@ public class AuthenticationRequestDto {
     protected String username;
     protected String password;
 
+    public AuthenticationRequestDto(String username, String password) {
+        this.username = username;
+        this.password = password;
+    }
+
+    public AuthenticationRequestDto() {
+    }
+
     public String getUsername() {
         return username;
     }

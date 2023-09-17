@@ -3,15 +3,20 @@ package ru.ktelabs.test.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.TicketDTO;
 
 import java.util.UUID;
 
 @Entity
 public class Ticket extends AbstractEntity {
+    @NotNull
     @ManyToOne
     private Doctor doctor;
+    @NotNull
     @ManyToOne
     private Customer customer;
+    @NotNull
     @ManyToOne
     private Cabinet cabinet;
     @OneToOne
@@ -31,6 +36,14 @@ public class Ticket extends AbstractEntity {
         this.customer = customer;
         this.cabinet = cabinet;
         this.timeSlot = timeSlot;
+    }
+
+    public Ticket(TicketDTO dto){
+        super();
+        this.doctor = dto.getDoctor();
+        this.customer = dto.getCustomer();
+        this.cabinet = dto.getCabinet();
+        this.timeSlot = dto.getTimeSlot();
     }
 
     public Ticket() {

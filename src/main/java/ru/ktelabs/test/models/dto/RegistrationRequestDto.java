@@ -12,6 +12,9 @@ public class RegistrationRequestDto extends AuthenticationRequestDto {
         return newModel;
     }
 
+    public RegistrationRequestDto() {
+    }
+
     public String getEmail() {
         return email;
     }

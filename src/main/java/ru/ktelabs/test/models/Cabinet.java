@@ -1,12 +1,15 @@
 package ru.ktelabs.test.models;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.CabinetDTO;
 
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 public class Cabinet extends AbstractEntity {
+    @NotNull
     private int number;
     @OneToMany
     private Set<Ticket> tickets;
@@ -20,6 +23,11 @@ public class Cabinet extends AbstractEntity {
         super(id, uuid);
         this.number = number;
         this.tickets = tickets;
+    }
+
+    public Cabinet(CabinetDTO dto){
+        super();
+        this.number = dto.getNumber();
     }
 
     public Cabinet() {

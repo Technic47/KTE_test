@@ -8,7 +8,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.Customer;
+import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.AbstractDto;
+import ru.ktelabs.test.models.dto.CustomerDTO;
+import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.services.CustomerService;
 
 import java.util.List;
@@ -17,9 +21,14 @@ import java.util.UUID;
 @Tag(name = "Customers", description = "The Customer API")
 @RestController
 @RequestMapping("/api/users/customers")
-public class CustomerController extends AbstractController<Customer, CustomerService> {
+public class CustomerController extends AbstractController<Customer, CustomerService, CustomerDTO> {
     protected CustomerController(CustomerService service) {
         super(service);
+    }
+
+    @Override
+    public ResponseEntity<Customer> create(@RequestBody CustomerDTO newDTO) {
+        return ResponseEntity.ok(service.save(new Customer(newDTO)));
     }
 
     @Operation(summary = "Get TimeSlots by customerId")

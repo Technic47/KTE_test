@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import ru.ktelabs.test.models.AbstractEntity;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.services.CommonService;
 
 import java.security.Principal;
@@ -16,8 +17,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class AbstractController<E extends AbstractEntity,
-        S extends CommonService<E>> {
+public abstract class AbstractController<
+        E extends AbstractEntity,
+        S extends CommonService<E>,
+        T extends AbstractDto> {
     protected final S service;
 
     protected AbstractController(S service) {
@@ -43,11 +46,13 @@ public abstract class AbstractController<E extends AbstractEntity,
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content)})
     @PostMapping()
-    public ResponseEntity<E> create(@RequestBody E newItem){
-        E created = service.save(newItem);
-
-        return ResponseEntity.ok(created);
-    }
+    public abstract ResponseEntity<E> create(@RequestBody T newDTO);
+//    {
+//        E item = new E(newItem);
+//        E created = service.save(newItem);
+//
+//        return ResponseEntity.ok(created);
+//    }
 
     @Operation(summary = "Get entity by id")
     @ApiResponses(value = {
