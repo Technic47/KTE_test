@@ -2,6 +2,7 @@ package ru.ktelabs.test.configs.security;
 
 import jakarta.persistence.*;
 import ru.ktelabs.test.models.AbstractEntity;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.users.UserModel;
 
 import java.sql.Timestamp;
@@ -19,6 +20,11 @@ public class VerificationToken extends AbstractEntity {
     private UserModel user;
 
     private Date expiryDate;
+
+    @Override
+    public AbstractDto createDTO() {
+        return null;
+    }
 
     public VerificationToken() {
     }

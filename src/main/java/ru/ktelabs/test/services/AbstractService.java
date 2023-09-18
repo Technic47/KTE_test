@@ -14,12 +14,6 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
         implements CommonService<E> {
     protected final R repository;
 
-//    protected DoctorService doctorService;
-//    protected CustomerService customerService;
-//    protected TimeSlotService timeSlotService;
-//    protected TicketService ticketService;
-//    protected CabinetService cabinetService;
-
     public AbstractService(R repository) {
         this.repository = repository;
     }

@@ -2,6 +2,7 @@ package ru.ktelabs.test.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.CabinetDTO;
 
 import java.util.Objects;
@@ -30,6 +31,11 @@ public class Cabinet extends AbstractEntity {
     public Cabinet(CabinetDTO dto){
         super();
         this.number = dto.getNumber();
+    }
+
+    @Override
+    public AbstractDto createDTO() {
+        return new CabinetDTO(this);
     }
 
     public Cabinet() {

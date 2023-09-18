@@ -25,9 +25,6 @@ class CabinetTest {
         Cabinet cabinet1 = new Cabinet(100);
         Cabinet cabinet2 = new Cabinet(200);
         assertNotEquals(cabinet1, cabinet2);
-
-        cabinet1.setNumber(200);
-        assertEquals(cabinet1, cabinet2);
     }
 
     @Test

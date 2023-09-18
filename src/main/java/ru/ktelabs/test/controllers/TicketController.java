@@ -20,15 +20,12 @@ import java.util.List;
 @Tag(name = "Tickets", description = "The Ticket API")
 @RestController
 @RequestMapping("/api/users/tickets")
-public class TicketController
-//        extends AbstractController<Ticket, TicketService, TicketDTO>
-{
+public class TicketController{
     private final TicketService service;
     private final DoctorService doctorService;
     private final CustomerService customerService;
     private final TimeSlotService timeSlotService;
     protected TicketController(TicketService service, DoctorService doctorService, CustomerService customerService, TimeSlotService timeSlotService) {
-//        super(service);
         this.service = service;
         this.doctorService = doctorService;
         this.customerService = customerService;

@@ -37,6 +37,11 @@ public class Doctor extends HumanModel {
         this.age = new GregorianCalendar().get(Calendar.YEAR) - birthDate.get((Calendar.YEAR));
     }
 
+    @Override
+    public AbstractDto createDTO() {
+        return DoctorDTO.createDoctorDTO(this);
+    }
+
     public Doctor() {
         super();
     }
@@ -47,19 +52,5 @@ public class Doctor extends HumanModel {
 
     public void setSpeciality(String speciality) {
         this.speciality = speciality;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Doctor)) return false;
-        if (!super.equals(o)) return false;
-        Doctor doctor = (Doctor) o;
-        return Objects.equals(speciality, doctor.speciality);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(super.hashCode(), speciality);
     }
 }

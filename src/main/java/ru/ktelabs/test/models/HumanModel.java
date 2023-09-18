@@ -18,7 +18,7 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
     protected String secondName;
     protected String givenName;
     @NotNull
-    @JsonProperty(value = "type")
+    @JsonProperty(value = "gender")
     @Enumerated(EnumType.STRING)
     protected Gender gender;
     @JsonFormat(pattern = "yyyy-MM-DD")
@@ -30,7 +30,7 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Calendar updated;
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE, orphanRemoval = true)
     protected Set<Ticket> tickets;
 
     public HumanModel() {
@@ -132,18 +132,5 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
 
     public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof HumanModel)) return false;
-        HumanModel that = (HumanModel) o;
-        return age == that.age && Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(givenName, that.givenName) && gender == that.gender && Objects.equals(birthDate, that.birthDate) && Objects.equals(created, that.created) && Objects.equals(updated, that.updated) && Objects.equals(tickets, that.tickets);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(firstName, secondName, givenName, gender, birthDate, age, created, updated, tickets);
     }
 }

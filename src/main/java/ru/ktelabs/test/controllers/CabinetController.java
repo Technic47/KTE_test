@@ -12,6 +12,9 @@ import ru.ktelabs.test.models.dto.CabinetDTO;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.services.CabinetService;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Tag(name = "Cabinets", description = "The Cabinet API")
 @RestController
 @RequestMapping("/api/users/cabinets")
@@ -21,7 +24,16 @@ public class CabinetController extends AbstractController<Cabinet, CabinetServic
     }
 
     @Override
-    public ResponseEntity<Cabinet> create(@RequestBody CabinetDTO newDTO) {
-        return ResponseEntity.ok(service.save(new Cabinet(newDTO)));
+    public ResponseEntity<List<CabinetDTO>> index() {
+        List<Cabinet> index = service.index();
+        List<CabinetDTO> dtoList = new ArrayList<>();
+        index.forEach(item -> dtoList.add(new CabinetDTO(item)));
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @Override
+    public ResponseEntity<CabinetDTO> create(@RequestBody CabinetDTO newDTO) {
+        Cabinet saved = service.save(new Cabinet(newDTO));
+        return ResponseEntity.ok(new CabinetDTO(saved));
     }
 }

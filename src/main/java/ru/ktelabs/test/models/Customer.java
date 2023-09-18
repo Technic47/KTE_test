@@ -3,6 +3,7 @@ package ru.ktelabs.test.models;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.CustomerDTO;
 
 import java.util.*;
@@ -26,6 +27,12 @@ public class Customer extends HumanModel implements TicketHandler{
         this.birthDate = dto.getBirthDate();
         this.age = new GregorianCalendar().get(Calendar.YEAR) - birthDate.get((Calendar.YEAR));
     }
+
+    @Override
+    public AbstractDto createDTO() {
+        return CustomerDTO.createCustomerDTO(this);
+    }
+
     public Customer() {
         super();
     }

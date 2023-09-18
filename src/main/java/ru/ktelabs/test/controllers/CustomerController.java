@@ -13,8 +13,10 @@ import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.CustomerDTO;
 import ru.ktelabs.test.models.dto.DoctorDTO;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.services.CustomerService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -27,8 +29,17 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
     }
 
     @Override
-    public ResponseEntity<Customer> create(@RequestBody CustomerDTO newDTO) {
-        return ResponseEntity.ok(service.save(new Customer(newDTO)));
+    public ResponseEntity<List<CustomerDTO>> index() {
+        List<Customer> index = service.index();
+        List<CustomerDTO> dtoList = new ArrayList<>();
+        index.forEach(item -> dtoList.add(CustomerDTO.createCustomerDTO(item)));
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @Override
+    public ResponseEntity<CustomerDTO> create(@RequestBody CustomerDTO newDTO) {
+        Customer saved = service.save(new Customer(newDTO));
+        return ResponseEntity.ok(CustomerDTO.createCustomerDTO(saved));
     }
 
     @Operation(summary = "Get TimeSlots by customerId")
@@ -40,7 +51,7 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
             @ApiResponse(responseCode = "404", description = "Customer not found",
                     content = @Content)})
     @GetMapping("/{customerId}/slots")
-    public ResponseEntity<List<TimeSlot>> getTimeSlots(@PathVariable Long customerId) {
+    public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(@PathVariable Long customerId) {
         return ResponseEntity.ok(service.getSlots(customerId));
     }
 
@@ -55,7 +66,7 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
             @ApiResponse(responseCode = "404", description = "Customer not found",
                     content = @Content)})
     @GetMapping("/slots")
-    public ResponseEntity<List<TimeSlot>> getTimeSlots(
+    public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(
             @RequestParam(name = "uuid", required = false) UUID uuid,
             @RequestParam(name = "customerId", required = false) Long customerId
     ) {

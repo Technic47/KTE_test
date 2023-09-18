@@ -3,6 +3,7 @@ package ru.ktelabs.test.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 
 import java.util.Calendar;
@@ -48,13 +49,19 @@ public class TimeSlot extends AbstractEntity {
         this.duration = duration;
     }
 
+    @Override
+    public AbstractDto createDTO() {
+        return TimeSlotDTO.createTimeSlotDTO(this);
+    }
+
     public TimeSlot() {
     }
 
-    public TimeSlot(TimeSlotDTO dto) {
+    public TimeSlot(TimeSlotDTO dto, Cabinet cabinet) {
         super();
         this.startTime = dto.getStartTime();
         this.finishTime = dto.getFinishTime();
+        this.cabinet = cabinet;
     }
 
     public Calendar getStartTime() {

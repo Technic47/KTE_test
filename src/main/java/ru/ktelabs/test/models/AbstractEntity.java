@@ -12,7 +12,7 @@ import java.util.UUID;
 @MappedSuperclass
 public abstract class AbstractEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @NotNull
     private UUID uuid;
@@ -21,6 +21,8 @@ public abstract class AbstractEntity {
         this.id = id;
         this.uuid = uuid;
     }
+
+    public abstract AbstractDto createDTO();
 
 
     public AbstractEntity() {

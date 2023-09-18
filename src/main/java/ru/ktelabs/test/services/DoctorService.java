@@ -4,6 +4,8 @@ import org.springframework.stereotype.Service;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TicketDTO;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.DoctorRepository;
 
 import java.util.ArrayList;
@@ -30,14 +32,18 @@ public class DoctorService extends HumanModelService<Doctor, DoctorRepository> {
         return save(old);
     }
 
-    public List<Ticket> getTickets(Long id) {
+    public List<TicketDTO> getTickets(Long id) {
         Doctor doctor = getById(id);
-        return new ArrayList<>(doctor.getTickets());
+        List<TicketDTO> dtoList = new ArrayList<>();
+        doctor.getTickets().forEach(item -> dtoList.add(new TicketDTO(item)));
+        return dtoList;
     }
 
-    public List<Ticket> getTickets(UUID uuid) {
+    public List<TicketDTO> getTickets(UUID uuid) {
         Doctor doctor = getByUuid(uuid);
-        return new ArrayList<>(doctor.getTickets());
+        List<TicketDTO> dtoList = new ArrayList<>();
+        doctor.getTickets().forEach(item -> dtoList.add(new TicketDTO(item)));
+        return dtoList;
     }
 
     /**
@@ -46,7 +52,7 @@ public class DoctorService extends HumanModelService<Doctor, DoctorRepository> {
      * @param id id of doctor.
      * @return List of TimeSlots.
      */
-    public List<TimeSlot> getSlots(Long id) {
+    public List<TimeSlotDTO> getSlots(Long id) {
         Doctor doctor = getById(id);
 
         return getSlotsFromModel(doctor);
@@ -58,7 +64,7 @@ public class DoctorService extends HumanModelService<Doctor, DoctorRepository> {
      * @param uuid uuid of doctor.
      * @return List of TimeSlots.
      */
-    public List<TimeSlot> getSlots(UUID uuid) {
+    public List<TimeSlotDTO> getSlots(UUID uuid) {
         Doctor doctor = getByUuid(uuid);
 
         return getSlotsFromModel(doctor);

@@ -4,10 +4,8 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import ru.ktelabs.test.models.Customer;
-import ru.ktelabs.test.models.Doctor;
-import ru.ktelabs.test.models.Ticket;
-import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.*;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CustomerRepository;
 
 import java.util.*;
@@ -71,9 +69,13 @@ class CustomerServiceTest {
         Doctor doctor2 = new Doctor("ivan", "kuznetsov", "andreevich", MALE, new GregorianCalendar(), "dentist");
         Doctor doctor3 = new Doctor("pavel", "ivanov", "andreevich", MALE, new GregorianCalendar(), "dentist");
 
-        Ticket ticket1 = new Ticket(doctor1, customer, new TimeSlot());
-        Ticket ticket2 = new Ticket(doctor2, customer, new TimeSlot());
-        Ticket ticket3 = new Ticket(doctor3, customer, new TimeSlot());
+        TimeSlot slot1 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(100));
+        TimeSlot slot2 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(200));
+        TimeSlot slot3 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(300));
+
+        Ticket ticket1 = new Ticket(doctor1, customer, slot1);
+        Ticket ticket2 = new Ticket(doctor2, customer, slot2);
+        Ticket ticket3 = new Ticket(doctor3, customer, slot3);
 
         Set<Ticket> tickets = new HashSet<>();
         tickets.add(ticket1);
@@ -85,7 +87,7 @@ class CustomerServiceTest {
                 .when(repository)
                 .findById(id);
 
-        List<TimeSlot> slots = service.getSlots(id);
+        List<TimeSlotDTO> slots = service.getSlots(id);
 
         verify(repository).findById(id);
 
@@ -101,9 +103,13 @@ class CustomerServiceTest {
         Doctor doctor2 = new Doctor("ivan", "kuznetsov", "andreevich", MALE, new GregorianCalendar(), "dentist");
         Doctor doctor3 = new Doctor("pavel", "ivanov", "andreevich", MALE, new GregorianCalendar(), "dentist");
 
-        Ticket ticket1 = new Ticket(doctor1, customer, new TimeSlot());
-        Ticket ticket2 = new Ticket(doctor2, customer, new TimeSlot());
-        Ticket ticket3 = new Ticket(doctor3, customer, new TimeSlot());
+        TimeSlot slot1 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(100));
+        TimeSlot slot2 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(200));
+        TimeSlot slot3 = new TimeSlot(new GregorianCalendar(), new GregorianCalendar(), new Cabinet(300));
+
+        Ticket ticket1 = new Ticket(doctor1, customer, slot1);
+        Ticket ticket2 = new Ticket(doctor2, customer, slot2);
+        Ticket ticket3 = new Ticket(doctor3, customer, slot3);
 
         Set<Ticket> tickets = new HashSet<>();
         tickets.add(ticket1);
@@ -115,7 +121,7 @@ class CustomerServiceTest {
                 .when(repository)
                 .findByUuid(uuid);
 
-        List<TimeSlot> slots = service.getSlots(uuid);
+        List<TimeSlotDTO> slots = service.getSlots(uuid);
 
         verify(repository).findByUuid(uuid);
 

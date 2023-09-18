@@ -1,9 +1,11 @@
 package ru.ktelabs.test.models;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.TicketDTO;
 
 import java.util.Objects;
@@ -34,12 +36,10 @@ public class Ticket extends AbstractEntity {
         this.timeSlot = timeSlot;
     }
 
-//    public Ticket(TicketDTO dto){
-//        super();
-//        this.doctor = dto.getDoctor();
-//        this.customer = dto.getCustomer();
-//        this.timeSlot = dto.getTimeSlot();
-//    }
+    @Override
+    public AbstractDto createDTO() {
+        return new TicketDTO(this);
+    }
 
     public Ticket() {
     }

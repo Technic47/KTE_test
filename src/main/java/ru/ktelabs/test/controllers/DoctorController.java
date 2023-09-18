@@ -7,11 +7,15 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Ticket;
+import ru.ktelabs.test.models.dto.CustomerDTO;
 import ru.ktelabs.test.models.dto.DoctorDTO;
+import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.services.DoctorService;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -24,8 +28,17 @@ public class DoctorController extends AbstractController<Doctor, DoctorService, 
     }
 
     @Override
-    public ResponseEntity<Doctor> create(@RequestBody DoctorDTO newDTO) {
-        return ResponseEntity.ok(service.save(new Doctor(newDTO)));
+    public ResponseEntity<List<DoctorDTO>> index() {
+        List<Doctor> index = service.index();
+        List<DoctorDTO> dtoList = new ArrayList<>();
+        index.forEach(item -> dtoList.add(DoctorDTO.createDoctorDTO(item)));
+        return ResponseEntity.ok(dtoList);
+    }
+
+    @Override
+    public ResponseEntity<DoctorDTO> create(@RequestBody DoctorDTO newDTO) {
+        Doctor saved = service.save(new Doctor(newDTO));
+        return ResponseEntity.ok(DoctorDTO.createDoctorDTO(saved));
     }
 
     @Operation(summary = "Get Tickets by doctorId")
@@ -37,7 +50,7 @@ public class DoctorController extends AbstractController<Doctor, DoctorService, 
             @ApiResponse(responseCode = "404", description = "Doctor not found",
                     content = @Content)})
     @GetMapping("/{id}/tickets")
-    public ResponseEntity<List<Ticket>> getTickets(@PathVariable Long id) {
+    public ResponseEntity<List<TicketDTO>> getTickets(@PathVariable Long id) {
         return ResponseEntity.ok(service.getTickets(id));
     }
 
@@ -51,8 +64,8 @@ public class DoctorController extends AbstractController<Doctor, DoctorService, 
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Doctor not found",
                     content = @Content)})
-    @GetMapping("/slots")
-    public ResponseEntity<List<Ticket>> getTimeSlots(
+    @GetMapping("/tickets")
+    public ResponseEntity<List<TicketDTO>> getTicketsById(
             @RequestParam(name = "uuid", required = false) UUID uuid,
             @RequestParam(name = "doctorId", required = false) Long doctorId
     ) {

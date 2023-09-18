@@ -25,7 +25,7 @@ public class TimeSlotDTO extends AbstractDto {
         this.cabinetNumber = cabinetNumber;
     }
 
-    private TimeSlotDTO() {
+    public TimeSlotDTO() {
     }
 
     public static TimeSlotDTO createTimeSlotDTO(TimeSlot timeSlot) {

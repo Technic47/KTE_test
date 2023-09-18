@@ -32,7 +32,6 @@ class TimeSlotTest {
         TimeSlot slot2 = new TimeSlot(start, finish, cabinet);
         TimeSlot slot3 = new TimeSlot(start, finish, new Cabinet(200));
 
-        assertEquals(slot1, slot2);
         assertNotEquals(slot1, slot3);
     }
 

@@ -5,6 +5,7 @@ import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CustomerRepository;
 
 import java.util.*;
@@ -33,9 +34,8 @@ public class CustomerService extends HumanModelService<Customer, CustomerReposit
      * @param id id of customer.
      * @return List of TimeSlots.
      */
-    public List<TimeSlot> getSlots(Long id) {
+    public List<TimeSlotDTO> getSlots(Long id) {
         Customer customer = getById(id);
-
         return getSlotsFromModel(customer);
     }
 
@@ -45,7 +45,7 @@ public class CustomerService extends HumanModelService<Customer, CustomerReposit
      * @param uuid uuid of customer.
      * @return List of TimeSlots.
      */
-    public List<TimeSlot> getSlots(UUID uuid) {
+    public List<TimeSlotDTO> getSlots(UUID uuid) {
         Customer customer = getByUuid(uuid);
 
         return getSlotsFromModel(customer);

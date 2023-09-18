@@ -8,10 +8,12 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import ru.ktelabs.test.models.AbstractEntity;
+import ru.ktelabs.test.models.Cabinet;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
+import ru.ktelabs.test.services.CabinetService;
 import ru.ktelabs.test.services.TimeSlotService;
 
 import java.util.Calendar;
@@ -23,14 +25,13 @@ import java.util.concurrent.ExecutionException;
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
 @RequestMapping("/api/users/timeSlots")
-public class TimeSlotController
-//        extends AbstractController<TimeSlot, TimeSlotService, TimeSlotDTO>
-{
+public class TimeSlotController{
     private final TimeSlotService service;
+    private final CabinetService cabinetService;
 
-    protected TimeSlotController(TimeSlotService service) {
-//        super(service);
+    protected TimeSlotController(TimeSlotService service, CabinetService cabinetService) {
         this.service = service;
+        this.cabinetService = cabinetService;
     }
 
     @Operation(summary = "Get all entities")
@@ -51,8 +52,10 @@ public class TimeSlotController
                             schema = @Schema(implementation = TimeSlotDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content)})
+    @PostMapping()
     public ResponseEntity<TimeSlotDTO> create(@RequestBody TimeSlotDTO newDTO) {
-        TimeSlot saved = service.save(new TimeSlot(newDTO));
+        Cabinet cabinet = cabinetService.findByNumber(newDTO.getCabinetNumber());
+        TimeSlot saved = service.save(new TimeSlot(newDTO, cabinet));
         return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(saved));
     }
 
@@ -81,8 +84,9 @@ public class TimeSlotController
     @PutMapping("/{id}")
     public ResponseEntity<TimeSlotShowDTO> update(@PathVariable Long id,
                                     @RequestBody TimeSlotDTO newItem) {
+        Cabinet cabinet = cabinetService.findByNumber(newItem.getCabinetNumber());
         TimeSlot old = service.getById(id);
-        TimeSlot updated = new TimeSlot(newItem);
+        TimeSlot updated = new TimeSlot(newItem, cabinet);
         updated = service.update(old, updated);
         return ResponseEntity.ok(new TimeSlotShowDTO(updated));
     }
@@ -133,10 +137,10 @@ public class TimeSlotController
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)})
     @PostMapping("/{slotId}/ticket/{ticketId}")
-    public ResponseEntity<TimeSlot> setTicket(@PathVariable Long slotId,
+    public ResponseEntity<TimeSlotDTO> setTicket(@PathVariable Long slotId,
                                               @PathVariable Long ticketId) {
         TimeSlot slot = service.setTicket(slotId, ticketId);
-        return ResponseEntity.ok(slot);
+        return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(slot));
     }
 
     @Operation(summary = "Get free timeSlots for cabinet for specified date")
@@ -150,7 +154,7 @@ public class TimeSlotController
                     content = @Content)})
     @GetMapping("/free")
     public ResponseEntity<List<TimeSlotShowDTO>> freeSlots(
-            @RequestParam(name = "cabinet", required = false) Integer cabinet,
+            @RequestParam(name = "cabinetNumber", required = false) Integer cabinet,
             @RequestParam(name = "year") Integer year,
             @RequestParam(name = "month") Integer month,
             @RequestParam(name = "day") Integer day) {
@@ -158,6 +162,5 @@ public class TimeSlotController
         if (cabinet != null) {
             return ResponseEntity.ok(service.getFreeSlotsForCabinetAndDate(cabinet, date));
         } else return ResponseEntity.ok(service.getAllFreeSlotsForDate(date));
-
     }
 }

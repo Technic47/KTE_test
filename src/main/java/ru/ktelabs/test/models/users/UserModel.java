@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.security.core.userdetails.UserDetails;
 import ru.ktelabs.test.models.AbstractEntity;
+import ru.ktelabs.test.models.dto.AbstractDto;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -50,6 +51,11 @@ public class UserModel extends AbstractEntity implements UserDetails {
     public UserModel(String username, String password) {
         this.username = username;
         this.password = password;
+    }
+
+    @Override
+    public AbstractDto createDTO() {
+        return null;
     }
 
     public UserModel() {

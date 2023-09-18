@@ -33,10 +33,7 @@ public abstract class AbstractController<
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = List.class))})})
     @GetMapping()
-    public ResponseEntity<List<E>> index() {
-        List<E> index = service.index();
-        return ResponseEntity.ok(index);
-    }
+    public abstract ResponseEntity<List<T>> index();
 
     @Operation(summary = "Create a new entity")
     @ApiResponses(value = {
@@ -46,36 +43,36 @@ public abstract class AbstractController<
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content)})
     @PostMapping()
-    public abstract ResponseEntity<E> create(@RequestBody T newDTO);
+    public abstract ResponseEntity<T> create(@RequestBody T newDTO);
 
     @Operation(summary = "Get entity by id")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Entity is found",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AbstractEntity.class))}),
+                            schema = @Schema(implementation = AbstractDto.class))}),
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)})
     @GetMapping("/{id}")
-    public ResponseEntity<E> show(@PathVariable("id") Long id) {
+    public ResponseEntity<AbstractDto> show(@PathVariable("id") Long id) {
         E found = service.getById(id);
-        return ResponseEntity.ok(found);
+        return ResponseEntity.ok(found.createDTO());
     }
 
     @Operation(summary = "Update entity")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Entity is updated",
                     content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = AbstractEntity.class))}),
+                            schema = @Schema(implementation = AbstractDto.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)})
     @PutMapping("/{id}")
-    public ResponseEntity<E> update(@PathVariable Long id,
+    public ResponseEntity<AbstractDto> update(@PathVariable Long id,
                                     @RequestBody E newItem) {
         E old = service.getById(id);
         E updated = service.update(old, newItem);
-        return ResponseEntity.ok(updated);
+        return ResponseEntity.ok(updated.createDTO());
     }
 
     @Operation(summary = "Delete entity")

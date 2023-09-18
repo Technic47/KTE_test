@@ -36,7 +36,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         this.cabinetService = cabinetService;
     }
 
-    public List<TimeSlotDTO> indexDTO(){
+    public List<TimeSlotDTO> indexDTO() {
         List<TimeSlotDTO> dtoList = new ArrayList<>();
         repository.findAll().forEach(item -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(item)));
         return dtoList;
@@ -88,6 +88,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     }
 
     private TimeSlot updateTicket(TimeSlot timeSlot, Ticket ticket) {
+        ticket.setTimeSlot(timeSlot);
         timeSlot.setTicket(ticket);
         return save(timeSlot);
     }
@@ -145,16 +146,22 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
      * @return List of generated slots.
      */
     public List<TimeSlotShowDTO> generateSlots(Integer year, Integer month, Integer day, Integer periodMinutes, int cabinetNumber) throws ExecutionException, InterruptedException {
-        if (year <= 0) {
+        year = year != null ? year : 0;
+        month = month != null ? month : 0;
+        day = day != null ? day : 0;
+        year = year != null ? year : 0;
+        periodMinutes = periodMinutes != null ? periodMinutes : STANDARD_PERIOD;
+
+        if (year < 0) {
             throw new IllegalArgumentException("Parameter 'year' is set incorrectly");
         }
-        if (month <= 0 || month > 12) {
+        if (month < 0 || month > 12) {
             throw new IllegalArgumentException("Parameter 'month' is set incorrectly");
         }
-        if (day <= 0 || day > 31) {
+        if (day < 0 || day > 31) {
             throw new IllegalArgumentException("Parameter 'day' is set incorrectly");
         }
-        if (periodMinutes <= 0) {
+        if (periodMinutes < 0) {
             throw new IllegalArgumentException("Parameter 'periodMinutes' is set incorrectly");
         }
 
@@ -169,11 +176,9 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
 
     //main logic of TimeSlots generation
     private List<TimeSlot> doGeneration(Integer year, Integer month, Integer day, Integer periodMinutes, Cabinet cabinet) throws ExecutionException, InterruptedException {
-        periodMinutes = periodMinutes != null ? periodMinutes : STANDARD_PERIOD;
-
-        if (year != null) {
-            if (month != null) {
-                if (day != null) {
+        if (year != 0) {
+            if (month != 0) {
+                if (day != 0) {
                     return repository.saveAll(generateForDay(year, month, day, periodMinutes, cabinet));
                 } else return repository.saveAll(generateForMonth(year, month, periodMinutes, cabinet));
             } else return repository.saveAll(generateForYear(year, periodMinutes, cabinet));

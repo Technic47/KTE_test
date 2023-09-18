@@ -3,6 +3,7 @@ package ru.ktelabs.test.services;
 import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CommonRepository;
 
 import java.util.ArrayList;
@@ -46,11 +47,10 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
         return save(customer);
     }
 
-    protected List<TimeSlot> getSlotsFromModel(HumanModel model) {
-        List<TimeSlot> timeSlotList = new ArrayList<>();
+    protected List<TimeSlotDTO> getSlotsFromModel(HumanModel model) {
+        List<TimeSlotDTO> dtoList = new ArrayList<>();
         Set<Ticket> tickets = model.getTickets();
-        tickets.forEach(ticket -> timeSlotList.add(ticket.getTimeSlot()));
-
-        return timeSlotList;
+        tickets.forEach(ticket -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(ticket.getTimeSlot())));
+        return dtoList;
     }
 }
