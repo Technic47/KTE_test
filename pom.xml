@@ -10,7 +10,9 @@
     </parent>
     <groupId>ru.KTELabs</groupId>
     <artifactId>test</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>1.0</version>
+    <packaging>jar</packaging>
+
     <name>test</name>
     <description>test</description>
     <properties>

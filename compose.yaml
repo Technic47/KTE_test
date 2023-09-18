@@ -1,0 +1,52 @@
+version: '3.1'
+
+services:
+  db:
+    image: postgres
+    restart: always
+    container_name: db
+    ports:
+      - "6666:5432"
+    volumes:
+      #      Windows:
+      - ../pgdata:/var/lib/postgresql/data
+    #      Linux:
+    #      - /home/technic47/pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=5*!zGa7f
+      - POSTGRES_DB=KTE
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    depends_on:
+      - db
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: technic47@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: 5*!zGa7f
+    ports:
+      - "5060:80"
+
+  main_app:
+    build:
+      context: .
+    container_name: app_V1.0
+    depends_on:
+      - db
+    restart: always
+    ports:
+      - "8085:8080"
+    env_file:
+      - .env
+
+  soap_module:
+    build:
+      context: soap
+    container_name: soap_V1
+    restart: always
+    ports:
+      - "8086:8086"
+    env_file:
+      - .env

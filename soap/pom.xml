@@ -10,7 +10,9 @@
     </parent>
     <groupId>ru.ktelabs</groupId>
     <artifactId>soap</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.5</version>
+    <packaging>jar</packaging>
+
     <name>soap</name>
     <description>soap</description>
     <properties>
