@@ -8,10 +8,7 @@ import jakarta.validation.constraints.NotNull;
 import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -51,4 +48,17 @@ public class Doctor extends HumanModel {
         this.speciality = speciality;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Doctor)) return false;
+        if (!super.equals(o)) return false;
+        Doctor doctor = (Doctor) o;
+        return Objects.equals(speciality, doctor.speciality);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), speciality);
+    }
 }

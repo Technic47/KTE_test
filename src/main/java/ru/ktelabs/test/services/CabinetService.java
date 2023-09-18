@@ -1,11 +1,16 @@
 package ru.ktelabs.test.services;
 
 import org.springframework.stereotype.Service;
+import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.Cabinet;
-import ru.ktelabs.test.models.Ticket;
+import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.repositories.CabinetRepository;
 
-import java.util.UUID;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CabinetService extends AbstractService<Cabinet, CabinetRepository> {
@@ -16,37 +21,43 @@ public class CabinetService extends AbstractService<Cabinet, CabinetRepository> 
     @Override
     public Cabinet update(Cabinet old, Cabinet newEntity) {
         old.setNumber(newEntity.getNumber());
-        old.setTickets(newEntity.getTickets());
+        old.setTimeslots(newEntity.getTimeslots());
         return save(old);
     }
 
-    public void addTicketToCabinet(Long id, Ticket ticket){
-        Cabinet cabinet = getById(id);
-        addTicketToCabinet(cabinet, ticket);
+    /**
+     * Find cabinet by unique number.
+     *
+     * @param number number to find.
+     * @return found entity.
+     */
+    public Cabinet findByNumber(int number) {
+        Optional<Cabinet> result = repository.findByNumber(number);
+        if (result.isEmpty()) {
+            throw new ResourceNotFoundException("No cabinet with number: " + number);
+        } else return result.get();
     }
 
-    public void addTicketToCabinet(UUID uuid, Ticket ticket){
-        Cabinet cabinet = getByUuid(uuid);
-        addTicketToCabinet(cabinet, ticket);
+    public Cabinet setSlots(int number, Collection<TimeSlot> slots){
+        Cabinet cabinet = findByNumber(number);
+        cabinet.setTimeslots(new HashSet<>(slots));
+        return save(cabinet);
     }
 
-    public void removeTicket(Long id, Ticket ticket){
-        Cabinet cabinet = getById(id);
-        delTicketFromCabinet(cabinet, ticket);
+    public Cabinet setSlots(Cabinet cabinet, Collection<TimeSlot> slots){
+        cabinet.setTimeslots(new HashSet<>(slots));
+        return save(cabinet);
     }
 
-    public void removeTicket(UUID uuid, Ticket ticket){
-        Cabinet cabinet = getByUuid(uuid);
-        delTicketFromCabinet(cabinet, ticket);
+    public Cabinet addSlot(int number, TimeSlot slot){
+        Cabinet cabinet = findByNumber(number);
+        cabinet.getTimeslots().add(slot);
+        return save(cabinet);
     }
 
-    private void addTicketToCabinet(Cabinet cabinet, Ticket ticket){
-        cabinet.getTickets().add(ticket);
-        this.save(cabinet);
-    }
-
-    private void delTicketFromCabinet(Cabinet cabinet, Ticket ticket){
-        cabinet.getTickets().remove(ticket);
-        this.save(cabinet);
+    public Cabinet removeSlot(int number, TimeSlot slot){
+        Cabinet cabinet = findByNumber(number);
+        cabinet.getTimeslots().remove(slot);
+        return save(cabinet);
     }
 }

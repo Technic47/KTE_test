@@ -4,25 +4,27 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import ru.ktelabs.test.models.dto.CabinetDTO;
 
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 
 @Entity
 public class Cabinet extends AbstractEntity {
     @NotNull
+    @Column(unique = true)
     private int number;
     @OneToMany
-    private Set<Ticket> tickets;
+    private Set<TimeSlot> timeslots;
 
     public Cabinet(int number) {
         super();
         this.number = number;
     }
 
-    public Cabinet(Long id, UUID uuid, int number, Set<Ticket> tickets) {
+    public Cabinet(Long id, UUID uuid, int number, Set<TimeSlot> timeslots) {
         super(id, uuid);
         this.number = number;
-        this.tickets = tickets;
+        this.timeslots = timeslots;
     }
 
     public Cabinet(CabinetDTO dto){
@@ -41,11 +43,24 @@ public class Cabinet extends AbstractEntity {
         this.number = number;
     }
 
-    public Set<Ticket> getTickets() {
-        return tickets;
+    public Set<TimeSlot> getTimeslots() {
+        return timeslots;
     }
 
-    public void setTickets(Set<Ticket> ticket) {
-        this.tickets = ticket;
+    public void setTimeslots(Set<TimeSlot> timeslots) {
+        this.timeslots = timeslots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cabinet)) return false;
+        Cabinet cabinet = (Cabinet) o;
+        return number == cabinet.number && Objects.equals(timeslots, cabinet.timeslots);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(number, timeslots);
     }
 }

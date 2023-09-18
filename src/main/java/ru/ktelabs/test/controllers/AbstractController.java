@@ -47,12 +47,6 @@ public abstract class AbstractController<
                     content = @Content)})
     @PostMapping()
     public abstract ResponseEntity<E> create(@RequestBody T newDTO);
-//    {
-//        E item = new E(newItem);
-//        E created = service.save(newItem);
-//
-//        return ResponseEntity.ok(created);
-//    }
 
     @Operation(summary = "Get entity by id")
     @ApiResponses(value = {

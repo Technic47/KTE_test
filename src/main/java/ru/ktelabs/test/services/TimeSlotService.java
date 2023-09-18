@@ -1,15 +1,19 @@
 package ru.ktelabs.test.services;
 
 import org.springframework.stereotype.Service;
+import ru.ktelabs.test.models.Cabinet;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
 import ru.ktelabs.test.repositories.TimeSlotRepository;
 
 import java.time.YearMonth;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.stream.Collectors;
 
 import static java.util.Calendar.*;
 
@@ -22,11 +26,13 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     private static int STANDARD_PERIOD = 15;
     private final ExecutorService executor;
     private final TicketService ticketService;
+    private final CabinetService cabinetService;
 
-    public TimeSlotService(TimeSlotRepository repository, ExecutorService executor, TicketService ticketService) {
+    public TimeSlotService(TimeSlotRepository repository, ExecutorService executor, TicketService ticketService, CabinetService cabinetService) {
         super(repository);
         this.executor = executor;
         this.ticketService = ticketService;
+        this.cabinetService = cabinetService;
     }
 
     @Override
@@ -78,11 +84,40 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         return save(timeSlot);
     }
 
-    public List<TimeSlot> getFreeSlotsForDoctor(Long doctorId, Calendar date) {
-        List<TimeSlot> slots = repository.findByOccupiedAndStartTimeAfter(false, date);
-        return slots.stream()
-                .filter(slot -> slot.getTicket()
-                        .getDoctor().getId().equals(doctorId)).toList();
+    /**
+     * Get free timeSlots for specified cabinet and date.
+     *
+     * @param cabinetNumber cabinet number for search.
+     * @param date          date for search.
+     * @return List of timeSlotsDTO.
+     */
+    public List<TimeSlotShowDTO> getFreeSlotsForCabinetAndDate(Integer cabinetNumber, Calendar date) {
+        Calendar finish = new GregorianCalendar();
+        finish.set(YEAR, date.get(YEAR));
+        finish.set(MONTH, date.get(MONTH));
+        finish.set(DAY_OF_MONTH, date.get(DAY_OF_MONTH));
+        finish.set(HOUR, WORKING_HOURS_FINISH + 1);
+
+        List<TimeSlotShowDTO> dtoList = new ArrayList<>();
+        Cabinet cabinet = cabinetService.findByNumber(cabinetNumber);
+
+        List<TimeSlot> slots = repository.findByCabinetAndOccupiedAndStartTimeAfterAndFinishTimeBefore(cabinet, false, date, finish);
+        slots.forEach(slot -> dtoList.add(new TimeSlotShowDTO(slot)));
+        return dtoList;
+    }
+
+    /**
+     * Get all free timeSlots for specified date.
+     *
+     * @param date date for search.
+     * @return List of timeSlotsDTO.
+     */
+    public List<TimeSlotShowDTO> getAllFreeSlotsForDate(Calendar date) {
+        List<TimeSlotShowDTO> dtoList = new ArrayList<>();
+        cabinetService.index().forEach(cabinet -> {
+            dtoList.addAll(getFreeSlotsForCabinetAndDate(cabinet.getNumber(), date));
+        });
+        return dtoList;
     }
 
     /**
@@ -98,7 +133,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
      * @param periodMinutes period for generation.
      * @return List of generated slots.
      */
-    public List<TimeSlot> generateSlots(Integer year, Integer month, Integer day, Integer periodMinutes) throws ExecutionException, InterruptedException {
+    public List<TimeSlotShowDTO> generateSlots(Integer year, Integer month, Integer day, Integer periodMinutes, int cabinetNumber) throws ExecutionException, InterruptedException {
         if (year <= 0) {
             throw new IllegalArgumentException("Parameter 'year' is set incorrectly");
         }
@@ -111,51 +146,58 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         if (periodMinutes <= 0) {
             throw new IllegalArgumentException("Parameter 'periodMinutes' is set incorrectly");
         }
-        return this.doGeneration(year, month, day, periodMinutes);
+
+        Cabinet cabinet = cabinetService.findByNumber(cabinetNumber);
+        List<TimeSlot> timeSlotList = this.doGeneration(year, month, day, periodMinutes, cabinet);
+        List<TimeSlotShowDTO> dtoList = new ArrayList<>();
+        cabinetService.setSlots(cabinet, timeSlotList);
+
+        timeSlotList.forEach(slot -> dtoList.add(new TimeSlotShowDTO(slot)));
+        return dtoList;
     }
 
     //main logic of TimeSlots generation
-    private List<TimeSlot> doGeneration(Integer year, Integer month, Integer day, Integer periodMinutes) throws ExecutionException, InterruptedException {
+    private List<TimeSlot> doGeneration(Integer year, Integer month, Integer day, Integer periodMinutes, Cabinet cabinet) throws ExecutionException, InterruptedException {
         periodMinutes = periodMinutes != null ? periodMinutes : STANDARD_PERIOD;
 
         if (year != null) {
             if (month != null) {
                 if (day != null) {
-                    return repository.saveAll(generateForDay(year, month, day, periodMinutes));
-                } else return repository.saveAll(generateForMonth(year, month, periodMinutes));
-            } else return repository.saveAll(generateForYear(year, periodMinutes));
+                    return repository.saveAll(generateForDay(year, month, day, periodMinutes, cabinet));
+                } else return repository.saveAll(generateForMonth(year, month, periodMinutes, cabinet));
+            } else return repository.saveAll(generateForYear(year, periodMinutes, cabinet));
         } else {
             Calendar now = new GregorianCalendar();
             return generateForDay(now.get(YEAR),
                     now.get(MONTH),
                     now.get(DAY_OF_WEEK),
-                    periodMinutes);
+                    periodMinutes, cabinet);
         }
     }
 
-    private List<TimeSlot> generateForYear(int year, int periodMinutes) throws ExecutionException, InterruptedException {
+    private List<TimeSlot> generateForYear(int year, int periodMinutes, Cabinet cabinet) throws ExecutionException, InterruptedException {
         List<TimeSlot> slotList = new ArrayList<>();
         for (int i = 1; i < 12; i++) {
             int finalI = i;
-            slotList.addAll(executor.submit(() -> generateForMonth(year, finalI, periodMinutes)).get());
+            slotList.addAll(executor.submit(() -> generateForMonth(year, finalI, periodMinutes, cabinet)).get());
         }
         return slotList;
     }
 
-    private List<TimeSlot> generateForMonth(int year, int month, int periodMinutes) throws ExecutionException, InterruptedException {
+    private List<TimeSlot> generateForMonth(int year, int month, int periodMinutes, Cabinet cabinet) throws ExecutionException, InterruptedException {
         return executor.submit(() -> {
             YearMonth yearMonth = YearMonth.of(year, month);
             int days = yearMonth.lengthOfMonth();
             List<TimeSlot> slotList = new ArrayList<>();
             for (int i = 1; i < days; i++) {
-                slotList.addAll(generateForDay(year, month, i, periodMinutes));
+                slotList.addAll(generateForDay(year, month, i, periodMinutes, cabinet));
             }
             return slotList;
         }).get();
     }
 
     //generation logic for 1 day
-    private List<TimeSlot> generateForDay(int year, int month, int day, int periodMinutes) {
+    private List<TimeSlot> generateForDay(int year, int month, int day, int periodMinutes, Cabinet cabinet) {
         List<TimeSlot> slotList = new ArrayList<>();
         int periodHours = 0;
 
@@ -184,9 +226,9 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
             }
 
             Calendar finish = new GregorianCalendar(year, month, day, newHours, newMinutes, 0);
-            boolean exist = existByStartAndFinish(start, finish);
+            boolean exist = existByStartAndFinish(cabinet, start, finish);
             if (!exist) {
-                slotList.add(new TimeSlot(start, finish));
+                slotList.add(new TimeSlot(start, finish, cabinet));
             }
 
             currentHours = newHours;
@@ -196,7 +238,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         return slotList;
     }
 
-    public boolean existByStartAndFinish(Calendar start, Calendar finish) {
-        return repository.existsByStartTimeAndFinishTime(start, finish);
+    public boolean existByStartAndFinish(Cabinet cabinet, Calendar start, Calendar finish) {
+        return repository.existsByCabinetAndStartTimeAndFinishTime(cabinet, start, finish);
     }
 }

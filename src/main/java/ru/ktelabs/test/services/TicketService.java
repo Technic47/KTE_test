@@ -12,7 +12,6 @@ public class TicketService extends AbstractService<Ticket, TicketRepository> {
 
     @Override
     public Ticket update(Ticket old, Ticket newEntity) {
-        old.setCabinet(newEntity.getCabinet());
         old.setCustomer(newEntity.getCustomer());
         old.setDoctor(newEntity.getDoctor());
         old.setTimeSlot(newEntity.getTimeSlot());

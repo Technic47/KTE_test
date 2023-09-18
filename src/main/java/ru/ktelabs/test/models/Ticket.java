@@ -6,6 +6,7 @@ import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
 import ru.ktelabs.test.models.dto.TicketDTO;
 
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
@@ -16,25 +17,20 @@ public class Ticket extends AbstractEntity {
     @NotNull
     @ManyToOne
     private Customer customer;
-    @NotNull
-    @ManyToOne
-    private Cabinet cabinet;
     @OneToOne
     private TimeSlot timeSlot;
 
-    public Ticket(Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
+    public Ticket(Doctor doctor, Customer customer, TimeSlot timeSlot) {
         super();
         this.doctor = doctor;
         this.customer = customer;
-        this.cabinet = cabinet;
         this.timeSlot = timeSlot;
     }
 
-    public Ticket(Long id, UUID uuid, Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
+    public Ticket(Long id, UUID uuid, Doctor doctor, Customer customer, TimeSlot timeSlot) {
         super(id, uuid);
         this.doctor = doctor;
         this.customer = customer;
-        this.cabinet = cabinet;
         this.timeSlot = timeSlot;
     }
 
@@ -42,7 +38,6 @@ public class Ticket extends AbstractEntity {
         super();
         this.doctor = dto.getDoctor();
         this.customer = dto.getCustomer();
-        this.cabinet = dto.getCabinet();
         this.timeSlot = dto.getTimeSlot();
     }
 
@@ -65,19 +60,24 @@ public class Ticket extends AbstractEntity {
         this.customer = customer;
     }
 
-    public Cabinet getCabinet() {
-        return cabinet;
-    }
-
-    public void setCabinet(Cabinet cabinet) {
-        this.cabinet = cabinet;
-    }
-
     public TimeSlot getTimeSlot() {
         return timeSlot;
     }
 
     public void setTimeSlot(TimeSlot timeSlot) {
         this.timeSlot = timeSlot;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Ticket)) return false;
+        Ticket ticket = (Ticket) o;
+        return Objects.equals(doctor, ticket.doctor) && Objects.equals(customer, ticket.customer) && Objects.equals(timeSlot, ticket.timeSlot);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(doctor, customer, timeSlot);
     }
 }

@@ -26,10 +26,9 @@ public class Customer extends HumanModel implements TicketHandler{
         this.birthDate = dto.getBirthDate();
         this.age = new GregorianCalendar().get(Calendar.YEAR) - birthDate.get((Calendar.YEAR));
     }
-
-
-
     public Customer() {
         super();
     }
+
+
 }

@@ -18,7 +18,7 @@ public class DoctorDTO extends AbstractDto {
     private String secondName;
     private String givenName;
     @NotNull
-    @JsonProperty(value = "type")
+    @JsonProperty(value = "gender")
     @Enumerated(EnumType.ORDINAL)
     private Gender gender;
     @JsonFormat(pattern = "yyyy-MM-DD")

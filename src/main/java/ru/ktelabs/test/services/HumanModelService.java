@@ -2,8 +2,12 @@ package ru.ktelabs.test.services;
 
 import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.Ticket;
+import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.repositories.CommonRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public abstract class HumanModelService<E extends HumanModel, R extends CommonRepository<E>>
@@ -40,5 +44,13 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
     public E removeTicketFromCustomer(E customer, Ticket ticket) {
         customer.getTickets().remove(ticket);
         return save(customer);
+    }
+
+    protected List<TimeSlot> getSlotsFromModel(HumanModel model) {
+        List<TimeSlot> timeSlotList = new ArrayList<>();
+        Set<Ticket> tickets = model.getTickets();
+        tickets.forEach(ticket -> timeSlotList.add(ticket.getTimeSlot()));
+
+        return timeSlotList;
     }
 }

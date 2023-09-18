@@ -35,8 +35,6 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "TimeSlots loaded",
                     content = @Content),
-            @ApiResponse(responseCode = "400", description = "Invalid request Body",
-                    content = @Content),
             @ApiResponse(responseCode = "403", description = "Access denied",
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Customer not found",

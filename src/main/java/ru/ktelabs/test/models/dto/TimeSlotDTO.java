@@ -3,6 +3,7 @@ package ru.ktelabs.test.models.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.Cabinet;
 
 import java.util.Calendar;
 
@@ -15,12 +16,19 @@ public class TimeSlotDTO extends AbstractDto {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar finishTime;
 
-    public TimeSlotDTO(Calendar startTime, Calendar finishTime) {
+    private int cabinetNumber;
+
+    public TimeSlotDTO(Calendar startTime, Calendar finishTime, int cabinetNumber) {
         this.startTime = startTime;
         this.finishTime = finishTime;
+        this.cabinetNumber = cabinetNumber;
     }
 
     public TimeSlotDTO() {
+    }
+
+    public int getCabinetNumber() {
+        return cabinetNumber;
     }
 
     public Calendar getStartTime() {

@@ -13,14 +13,11 @@ public class TicketDTO extends AbstractDto {
     private Doctor doctor;
     @NotNull
     private Customer customer;
-    @NotNull
-    private Cabinet cabinet;
     private TimeSlot timeSlot;
 
-    public TicketDTO(Doctor doctor, Customer customer, Cabinet cabinet, TimeSlot timeSlot) {
+    public TicketDTO(Doctor doctor, Customer customer, TimeSlot timeSlot) {
         this.doctor = doctor;
         this.customer = customer;
-        this.cabinet = cabinet;
         this.timeSlot = timeSlot;
     }
 
@@ -33,10 +30,6 @@ public class TicketDTO extends AbstractDto {
 
     public Customer getCustomer() {
         return customer;
-    }
-
-    public Cabinet getCabinet() {
-        return cabinet;
     }
 
     public TimeSlot getTimeSlot() {

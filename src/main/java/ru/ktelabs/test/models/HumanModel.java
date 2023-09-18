@@ -6,10 +6,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import ru.ktelabs.test.models.dto.AbstractDto;
 
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
 
 import static ru.ktelabs.test.models.Gender.UNKNOWN;
 
@@ -135,5 +132,18 @@ public class HumanModel extends AbstractEntity implements TicketHandler {
 
     public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HumanModel)) return false;
+        HumanModel that = (HumanModel) o;
+        return age == that.age && Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(givenName, that.givenName) && gender == that.gender && Objects.equals(birthDate, that.birthDate) && Objects.equals(created, that.created) && Objects.equals(updated, that.updated) && Objects.equals(tickets, that.tickets);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(firstName, secondName, givenName, gender, birthDate, age, created, updated, tickets);
     }
 }
