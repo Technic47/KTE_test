@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import ru.ktelabs.test.models.Cabinet;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
 import ru.ktelabs.test.repositories.TimeSlotRepository;
 
@@ -25,14 +26,20 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     private static int WORKING_MINUTES_FINISH = 0;
     private static int STANDARD_PERIOD = 15;
     private final ExecutorService executor;
-    private final TicketService ticketService;
-    private final CabinetService cabinetService;
+    protected final TicketService ticketService;
+    protected final CabinetService cabinetService;
 
     public TimeSlotService(TimeSlotRepository repository, ExecutorService executor, TicketService ticketService, CabinetService cabinetService) {
         super(repository);
         this.executor = executor;
         this.ticketService = ticketService;
         this.cabinetService = cabinetService;
+    }
+
+    public List<TimeSlotDTO> indexDTO(){
+        List<TimeSlotDTO> dtoList = new ArrayList<>();
+        repository.findAll().forEach(item -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(item)));
+        return dtoList;
     }
 
     @Override
@@ -98,7 +105,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         return getAllSlots(cabinet, date);
     }
 
-    private List<TimeSlotShowDTO> getAllSlots(Cabinet cabinet, Calendar date){
+    private List<TimeSlotShowDTO> getAllSlots(Cabinet cabinet, Calendar date) {
         Calendar finish = new GregorianCalendar();
         finish.set(YEAR, date.get(YEAR));
         finish.set(MONTH, date.get(MONTH));

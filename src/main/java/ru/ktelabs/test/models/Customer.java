@@ -30,5 +30,4 @@ public class Customer extends HumanModel implements TicketHandler{
         super();
     }
 
-
 }

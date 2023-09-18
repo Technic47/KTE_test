@@ -34,12 +34,12 @@ public class Ticket extends AbstractEntity {
         this.timeSlot = timeSlot;
     }
 
-    public Ticket(TicketDTO dto){
-        super();
-        this.doctor = dto.getDoctor();
-        this.customer = dto.getCustomer();
-        this.timeSlot = dto.getTimeSlot();
-    }
+//    public Ticket(TicketDTO dto){
+//        super();
+//        this.doctor = dto.getDoctor();
+//        this.customer = dto.getCustomer();
+//        this.timeSlot = dto.getTimeSlot();
+//    }
 
     public Ticket() {
     }

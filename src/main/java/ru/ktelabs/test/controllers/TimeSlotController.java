@@ -8,6 +8,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import ru.ktelabs.test.models.AbstractEntity;
 import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
@@ -16,35 +17,86 @@ import ru.ktelabs.test.services.TimeSlotService;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.ExecutionException;
 
 
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
 @RequestMapping("/api/users/timeSlots")
-public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotService, TimeSlotDTO> {
+public class TimeSlotController
+//        extends AbstractController<TimeSlot, TimeSlotService, TimeSlotDTO>
+{
+    private final TimeSlotService service;
+
     protected TimeSlotController(TimeSlotService service) {
-        super(service);
+//        super(service);
+        this.service = service;
     }
 
-    @Override
-    public ResponseEntity<TimeSlot> create(@RequestBody TimeSlotDTO newDTO) {
-        return ResponseEntity.ok(service.save(new TimeSlot(newDTO)));
-    }
-
-    @Override
-    public ResponseEntity<TimeSlot> show(Long id) {
-        TimeSlot found = service.getById(id);
-        found.getCabinet().setTimeslots(null);
-        return ResponseEntity.ok(found);
-    }
-
-    @Override
-    public ResponseEntity<List<TimeSlot>> index() {
-        List<TimeSlot> slots = service.index();
-        slots.forEach(slot -> slot.getCabinet().setTimeslots(null));
+    @Operation(summary = "Get all entities")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Index is ok",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = List.class))})})
+    @GetMapping()
+    public ResponseEntity<List<TimeSlotDTO>> index() {
+        List<TimeSlotDTO> slots = service.indexDTO();
         return ResponseEntity.ok(slots);
+    }
+
+    @Operation(summary = "Create a new entity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entity is created",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TimeSlotDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid request Body",
+                    content = @Content)})
+    public ResponseEntity<TimeSlotDTO> create(@RequestBody TimeSlotDTO newDTO) {
+        TimeSlot saved = service.save(new TimeSlot(newDTO));
+        return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(saved));
+    }
+
+    @Operation(summary = "Get entity by id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entity is found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TimeSlotShowDTO.class))}),
+            @ApiResponse(responseCode = "404", description = "Entity not found",
+                    content = @Content)})
+    @GetMapping("/{id}")
+    public ResponseEntity<TimeSlotShowDTO> show(@PathVariable Long id) {
+        TimeSlot found = service.getById(id);
+        return ResponseEntity.ok(new TimeSlotShowDTO(found));
+    }
+
+    @Operation(summary = "Update entity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entity is updated",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = TimeSlotShowDTO.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid request Body",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Entity not found",
+                    content = @Content)})
+    @PutMapping("/{id}")
+    public ResponseEntity<TimeSlotShowDTO> update(@PathVariable Long id,
+                                    @RequestBody TimeSlotDTO newItem) {
+        TimeSlot old = service.getById(id);
+        TimeSlot updated = new TimeSlot(newItem);
+        updated = service.update(old, updated);
+        return ResponseEntity.ok(new TimeSlotShowDTO(updated));
+    }
+
+    @Operation(summary = "Delete entity")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Entity is deleted",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Entity not found",
+                    content = @Content)})
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+        boolean delete = service.delete(id);
+        return ResponseEntity.ok(delete);
     }
 
     @Operation(summary = "Generate slots")
@@ -65,7 +117,7 @@ public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotSer
             @RequestParam(name = "periodMinutes", required = false) Integer periodMinutes
     ) {
         try {
-            return ResponseEntity.ok(service.generateSlots(year, month, day, periodMinutes, cabinetNumber));
+            return ResponseEntity.ok(service.generateSlots(year, month - 1, day, periodMinutes, cabinetNumber));
         } catch (ExecutionException | InterruptedException e) {
             throw new RuntimeException(e);
         }
@@ -102,10 +154,7 @@ public class TimeSlotController extends AbstractController<TimeSlot, TimeSlotSer
             @RequestParam(name = "year") Integer year,
             @RequestParam(name = "month") Integer month,
             @RequestParam(name = "day") Integer day) {
-        Calendar date = new GregorianCalendar();
-        date.set(Calendar.YEAR, year);
-        date.set(Calendar.MONTH, month - 1);
-        date.set(Calendar.DAY_OF_WEEK, day);
+        Calendar date = new GregorianCalendar(year, month - 1, day);
         if (cabinet != null) {
             return ResponseEntity.ok(service.getFreeSlotsForCabinetAndDate(cabinet, date));
         } else return ResponseEntity.ok(service.getAllFreeSlotsForDate(date));

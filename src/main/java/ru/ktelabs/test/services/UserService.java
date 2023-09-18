@@ -1,6 +1,5 @@
 package ru.ktelabs.test.services;
 
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import ru.ktelabs.test.customExceptions.RegistrationException;
@@ -10,7 +9,6 @@ import ru.ktelabs.test.models.users.UserRole;
 import ru.ktelabs.test.models.dto.RegistrationRequestDto;
 import ru.ktelabs.test.repositories.UserRepository;
 
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +16,12 @@ import static ru.ktelabs.test.models.users.UserRole.ROLE_ADMIN;
 import static ru.ktelabs.test.models.users.UserRole.ROLE_USER;
 
 @Service
-public class UserService extends AbstractService<UserModel, UserRepository> {
+public class UserService {
+    private final UserRepository repository;
     private final PasswordEncoder passwordEncoder;
 
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
-        super(repository);
+        this.repository = repository;
         this.passwordEncoder = passwordEncoder;
     }
 

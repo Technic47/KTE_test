@@ -1,38 +1,48 @@
 package ru.ktelabs.test.models.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
-import ru.ktelabs.test.models.Cabinet;
-import ru.ktelabs.test.models.Customer;
-import ru.ktelabs.test.models.Doctor;
-import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.Ticket;
 
-@JsonInclude(JsonInclude.Include.NON_NULL)
+import java.util.UUID;
+
 public class TicketDTO extends AbstractDto {
+    private Long id;
     @NotNull
-    private Doctor doctor;
+    private UUID uuid;
     @NotNull
-    private Customer customer;
-    private TimeSlot timeSlot;
+    private DoctorDTO doctor;
+    @NotNull
+    private CustomerDTO customer;
+    private TimeSlotDTO timeSlot;
 
-    public TicketDTO(Doctor doctor, Customer customer, TimeSlot timeSlot) {
-        this.doctor = doctor;
-        this.customer = customer;
-        this.timeSlot = timeSlot;
+    public TicketDTO(Ticket ticket) {
+        this.id = ticket.getId();
+        this.uuid = ticket.getUuid();
+        this.doctor = DoctorDTO.createDoctorDTO(ticket.getDoctor());
+        this.customer = CustomerDTO.createCustomerDTO(ticket.getCustomer());
+        this.timeSlot = TimeSlotDTO.createTimeSlotDTO(ticket.getTimeSlot());
     }
 
     public TicketDTO() {
     }
 
-    public Doctor getDoctor() {
+    public Long getId() {
+        return id;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
+
+    public DoctorDTO getDoctor() {
         return doctor;
     }
 
-    public Customer getCustomer() {
+    public CustomerDTO getCustomer() {
         return customer;
     }
 
-    public TimeSlot getTimeSlot() {
+    public TimeSlotDTO getTimeSlot() {
         return timeSlot;
     }
 }

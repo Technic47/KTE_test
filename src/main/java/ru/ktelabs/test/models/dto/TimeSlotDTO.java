@@ -3,7 +3,8 @@ package ru.ktelabs.test.models.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.validation.constraints.NotNull;
-import ru.ktelabs.test.models.Cabinet;
+import ru.ktelabs.test.models.TimeSlot;
+import ru.ktelabs.test.models.builders.TimeSlotDTOBuilder;
 
 import java.util.Calendar;
 
@@ -24,7 +25,15 @@ public class TimeSlotDTO extends AbstractDto {
         this.cabinetNumber = cabinetNumber;
     }
 
-    public TimeSlotDTO() {
+    private TimeSlotDTO() {
+    }
+
+    public static TimeSlotDTO createTimeSlotDTO(TimeSlot timeSlot) {
+        return new TimeSlotDTOBuilder()
+                .setStartTime(timeSlot.getStartTime())
+                .setFinishTime(timeSlot.getFinishTime())
+                .setCabinetNumber(timeSlot.getCabinet().getNumber())
+                .createTimeSlotDTO();
     }
 
     public int getCabinetNumber() {

@@ -15,6 +15,7 @@ public class TimeSlotShowDTO extends AbstractDto {
     @JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
     private Calendar finishTime;
     private int cabinetNumber;
+    private boolean occupied;
     private int duration;
 
     public TimeSlotShowDTO(TimeSlot timeSlot) {
@@ -23,6 +24,7 @@ public class TimeSlotShowDTO extends AbstractDto {
         this.startTime = timeSlot.getStartTime();
         this.finishTime = timeSlot.getFinishTime();
         this.cabinetNumber = timeSlot.getCabinet().getNumber();
+        this.occupied = timeSlot.isOccupied();
         this.duration = timeSlot.getDuration();
     }
 
@@ -67,6 +69,14 @@ public class TimeSlotShowDTO extends AbstractDto {
 
     public void setCabinetNumber(int cabinetNumber) {
         this.cabinetNumber = cabinetNumber;
+    }
+
+    public boolean isOccupied() {
+        return occupied;
+    }
+
+    public void setOccupied(boolean occupied) {
+        this.occupied = occupied;
     }
 
     public int getDuration() {

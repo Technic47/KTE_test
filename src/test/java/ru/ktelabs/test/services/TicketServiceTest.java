@@ -8,7 +8,6 @@ import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
-import ru.ktelabs.test.repositories.DoctorRepository;
 import ru.ktelabs.test.repositories.TicketRepository;
 
 import java.util.GregorianCalendar;

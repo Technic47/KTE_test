@@ -50,17 +50,4 @@ public class Cabinet extends AbstractEntity {
     public void setTimeslots(Set<TimeSlot> timeslots) {
         this.timeslots = timeslots;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Cabinet)) return false;
-        Cabinet cabinet = (Cabinet) o;
-        return number == cabinet.number && Objects.equals(timeslots, cabinet.timeslots);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(number, timeslots);
-    }
 }

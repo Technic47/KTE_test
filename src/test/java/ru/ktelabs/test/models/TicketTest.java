@@ -20,20 +20,20 @@ class TicketTest {
         assertThat(ticket.getTimeSlot()).isNotNull().isEqualTo(timeSlot);
     }
 
-    @Test
-    void creationFromDTOTest(){
-        Doctor doctor = new Doctor();
-        Customer customer = new Customer();
-        TimeSlot timeSlot = new TimeSlot();
-        TicketDTO dto = new TicketDTO(doctor, customer, timeSlot);
-
-        Ticket ticket = new Ticket(dto);
-
-        assertNotNull(ticket.getUuid());
-        assertThat(ticket.getCustomer()).isNotNull().isEqualTo(customer);
-        assertThat(ticket.getDoctor()).isNotNull().isEqualTo(doctor);
-        assertThat(ticket.getTimeSlot()).isNotNull().isEqualTo(timeSlot);
-    }
+//    @Test
+//    void creationFromDTOTest(){
+//        Doctor doctor = new Doctor();
+//        Customer customer = new Customer();
+//        TimeSlot timeSlot = new TimeSlot();
+//        TicketDTO dto = new TicketDTO(doctor, customer, timeSlot);
+//
+//        Ticket ticket = new Ticket(dto);
+//
+//        assertNotNull(ticket.getUuid());
+//        assertThat(ticket.getCustomer()).isNotNull().isEqualTo(customer);
+//        assertThat(ticket.getDoctor()).isNotNull().isEqualTo(doctor);
+//        assertThat(ticket.getTimeSlot()).isNotNull().isEqualTo(timeSlot);
+//    }
 
     @Test
     void equalsTest(){

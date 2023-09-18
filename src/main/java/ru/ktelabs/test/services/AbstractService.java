@@ -1,5 +1,6 @@
 package ru.ktelabs.test.services;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.AbstractEntity;
 import ru.ktelabs.test.repositories.CommonRepository;
@@ -12,6 +13,12 @@ import java.util.UUID;
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
         implements CommonService<E> {
     protected final R repository;
+
+//    protected DoctorService doctorService;
+//    protected CustomerService customerService;
+//    protected TimeSlotService timeSlotService;
+//    protected TicketService ticketService;
+//    protected CabinetService cabinetService;
 
     public AbstractService(R repository) {
         this.repository = repository;
@@ -55,4 +62,29 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
             return true;
         } else throw new ResourceNotFoundException(id);
     }
+//
+//    @Autowired
+//    private void setDoctorService(DoctorService doctorService) {
+//        this.doctorService = doctorService;
+//    }
+//
+//    @Autowired
+//    private void setCustomerService(CustomerService customerService) {
+//        this.customerService = customerService;
+//    }
+//
+//    @Autowired
+//    private void setTimeSlotService(TimeSlotService timeSlotService) {
+//        this.timeSlotService = timeSlotService;
+//    }
+//
+//    @Autowired
+//    private void setTicketService(TicketService ticketService) {
+//        this.ticketService = ticketService;
+//    }
+//
+//    @Autowired
+//    private void setCabinetService(CabinetService cabinetService) {
+//        this.cabinetService = cabinetService;
+//    }
 }

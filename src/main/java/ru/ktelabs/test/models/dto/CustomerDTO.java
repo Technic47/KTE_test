@@ -6,7 +6,10 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Gender;
+import ru.ktelabs.test.models.builders.CustomerDTOBuilder;
+import ru.ktelabs.test.models.builders.DoctorDTOBuilder;
 
 import java.util.Calendar;
 
@@ -33,6 +36,16 @@ public class CustomerDTO extends AbstractDto {
     }
 
     public CustomerDTO() {
+    }
+
+    public static CustomerDTO createCustomerDTO(Customer customer) {
+        return new CustomerDTOBuilder()
+                .setFirstName(customer.getFirstName())
+                .setSecondName(customer.getSecondName())
+                .setGivenName(customer.getGivenName())
+                .setGender(customer.getGender())
+                .setBirthDate(customer.getBirthDate())
+                .createCustomerDTO();
     }
 
     public String getFirstName() {

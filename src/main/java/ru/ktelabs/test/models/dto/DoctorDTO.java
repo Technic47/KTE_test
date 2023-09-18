@@ -6,7 +6,9 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.NotNull;
+import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Gender;
+import ru.ktelabs.test.models.builders.DoctorDTOBuilder;
 
 import java.util.Calendar;
 
@@ -35,7 +37,19 @@ public class DoctorDTO extends AbstractDto {
         this.speciality = speciality;
     }
 
+
     public DoctorDTO() {
+    }
+
+    public static DoctorDTO createDoctorDTO(Doctor doctor) {
+        return new DoctorDTOBuilder()
+                .setFirstName(doctor.getFirstName())
+                .setSecondName(doctor.getSecondName())
+                .setGivenName(doctor.getGivenName())
+                .setGender(doctor.getGender())
+                .setBirthDate(doctor.getBirthDate())
+                .setSpeciality(doctor.getSpeciality())
+                .createDoctorDTO();
     }
 
     public String getFirstName() {

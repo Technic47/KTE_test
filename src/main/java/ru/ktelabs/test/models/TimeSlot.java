@@ -102,17 +102,4 @@ public class TimeSlot extends AbstractEntity {
     public void setCabinet(Cabinet cabinet) {
         this.cabinet = cabinet;
     }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof TimeSlot)) return false;
-        TimeSlot slot = (TimeSlot) o;
-        return occupied == slot.occupied && duration == slot.duration && Objects.equals(startTime, slot.startTime) && Objects.equals(finishTime, slot.finishTime) && Objects.equals(cabinet, slot.cabinet) && Objects.equals(ticket, slot.ticket);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(startTime, finishTime, cabinet, ticket, occupied, duration);
-    }
 }
