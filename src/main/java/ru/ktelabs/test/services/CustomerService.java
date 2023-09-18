@@ -21,6 +21,7 @@ public class CustomerService extends HumanModelService<Customer, CustomerReposit
         old.setSecondName(newEntity.getSecondName());
         old.setGivenName(newEntity.getGivenName());
         old.setBirthDate(newEntity.getBirthDate());
+        old.setGender(newEntity.getGender());
 
         old.setUpdated(Calendar.getInstance());
         return save(old);

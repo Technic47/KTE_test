@@ -24,6 +24,7 @@ public class DoctorService extends HumanModelService<Doctor, DoctorRepository> {
         old.setGivenName(newEntity.getGivenName());
         old.setBirthDate(newEntity.getBirthDate());
         old.setSpeciality(newEntity.getSpeciality());
+        old.setGender(newEntity.getGender());
 
         old.setUpdated(Calendar.getInstance());
         return save(old);

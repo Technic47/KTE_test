@@ -39,6 +39,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     public TimeSlot update(TimeSlot old, TimeSlot newEntity) {
         old.setStartTime(newEntity.getStartTime());
         old.setFinishTime(newEntity.getFinishTime());
+        old.setCabinet(newEntity.getCabinet());
         return save(old);
     }
 
@@ -92,6 +93,12 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
      * @return List of timeSlotsDTO.
      */
     public List<TimeSlotShowDTO> getFreeSlotsForCabinetAndDate(Integer cabinetNumber, Calendar date) {
+        Cabinet cabinet = cabinetService.findByNumber(cabinetNumber);
+
+        return getAllSlots(cabinet, date);
+    }
+
+    private List<TimeSlotShowDTO> getAllSlots(Cabinet cabinet, Calendar date){
         Calendar finish = new GregorianCalendar();
         finish.set(YEAR, date.get(YEAR));
         finish.set(MONTH, date.get(MONTH));
@@ -99,7 +106,6 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         finish.set(HOUR, WORKING_HOURS_FINISH + 1);
 
         List<TimeSlotShowDTO> dtoList = new ArrayList<>();
-        Cabinet cabinet = cabinetService.findByNumber(cabinetNumber);
 
         List<TimeSlot> slots = repository.findByCabinetAndOccupiedAndStartTimeAfterAndFinishTimeBefore(cabinet, false, date, finish);
         slots.forEach(slot -> dtoList.add(new TimeSlotShowDTO(slot)));
@@ -114,9 +120,7 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
      */
     public List<TimeSlotShowDTO> getAllFreeSlotsForDate(Calendar date) {
         List<TimeSlotShowDTO> dtoList = new ArrayList<>();
-        cabinetService.index().forEach(cabinet -> {
-            dtoList.addAll(getFreeSlotsForCabinetAndDate(cabinet.getNumber(), date));
-        });
+        cabinetService.index().forEach(cabinet -> dtoList.addAll(getAllSlots(cabinet, date)));
         return dtoList;
     }
 

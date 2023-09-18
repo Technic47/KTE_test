@@ -74,7 +74,7 @@ public class TimeSlot extends AbstractEntity {
     }
 
     public int getDuration() {
-        this.duration = finishTime.compareTo(startTime);
+        this.duration = Math.abs(finishTime.get(Calendar.MINUTE) - startTime.get(Calendar.MINUTE));
         return duration;
     }
 

@@ -16,8 +16,9 @@ public class Doctor extends HumanModel {
     @NotNull
     private String speciality;
 
-    public Doctor(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate) {
+    public Doctor(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, String speciality) {
         super(firstName, secondName, givenName, gender, birthDate);
+        this.speciality = speciality;
     }
 
     public Doctor(Long id, UUID uuid, String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, int age, Calendar created, Calendar updated, Set<Ticket> tickets, String speciality) {
