@@ -33,7 +33,6 @@ public class SecurityConfig {
         this.customUserDetailsService = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
-
     }
 
     @Bean

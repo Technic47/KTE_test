@@ -1,10 +1,10 @@
 version: '3.1'
 
 services:
-  db:
+  local_db:
     image: postgres
     restart: always
-    container_name: db
+    container_name: local_db
     ports:
       - "6666:5432"
     volumes:
@@ -17,11 +17,11 @@ services:
       - POSTGRES_PASSWORD=5*!zGa7f
       - POSTGRES_DB=KTE
 
-  pgadmin:
+  local_pgadmin:
     image: dpage/pgadmin4:latest
-    container_name: pgadmin
+    container_name: local_pgadmin
     depends_on:
-      - db
+      - local_db
     restart: always
     environment:
       PGADMIN_DEFAULT_EMAIL: technic47@gmail.com
@@ -34,7 +34,7 @@ services:
       context: .
     container_name: app_V1.0
     depends_on:
-      - db
+      - local_db
     restart: always
     ports:
       - "8085:8080"
@@ -45,6 +45,8 @@ services:
     build:
       context: soap
     container_name: soap_V1
+    depends_on:
+      - local_db
     restart: always
     ports:
       - "8086:8086"

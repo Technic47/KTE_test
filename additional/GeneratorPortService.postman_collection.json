@@ -1,0 +1,126 @@
+{
+	"info": {
+		"_postman_id": "5a21e387-68b5-4dbd-b421-6c2944474f6d",
+		"name": "GeneratorPortService",
+		"description": "\n",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "25312518"
+	},
+	"item": [
+		{
+			"name": "generateTimeSlots",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <sch:generateTimeSlotsRequest xmlns=\"http://ktelabs.ru/soap/ws\">\n      <sch:year>76</sch:year>\n      <sch:month>11</sch:month>\n      <sch:day>98</sch:day>\n      <sch:periodMinutes>85</sch:periodMinutes>\n    </sch:generateTimeSlotsRequest>\n  </soap:Body>\n</soap:Envelope>\n",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{GeneratorPortSoap11BaseUrl}}/ws",
+					"host": [
+						"{{GeneratorPortSoap11BaseUrl}}"
+					],
+					"path": [
+						"ws"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "generateTimeSlots response",
+					"originalRequest": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "text/xml; charset=utf-8"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <sch:generateTimeSlotsRequest xmlns=\"http://ktelabs.ru/soap/ws\">\n      <sch:year>2010</sch:year>\n      <sch:month>11</sch:month>\n      <sch:day>13</sch:day>\n      <sch:periodMinutes>30</sch:periodMinutes>\n    </sch:generateTimeSlotsRequest>\n  </soap:Body>\n</soap:Envelope>\n",
+							"options": {
+								"raw": {
+									"language": "xml"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8086/ws",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8086",
+							"path": [
+								"ws"
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "xml",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "text/xml; charset=utf-8"
+						}
+					],
+					"cookie": [],
+					"body": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope xmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\">\n  <soap:Body>\n    <sch:generateTimeSlotsResponse xmlns=\"http://ktelabs.ru/soap/ws\">\n      <sch:timeSlots>\n        <sch:startTime>2023-09-17T09:30:39.746Z</sch:startTime>\n        <sch:finishTime>2023-09-17T09:30:39.746Z</sch:finishTime>\n      </sch:timeSlots>\n    </sch:generateTimeSlotsResponse>\n  </soap:Body>\n</soap:Envelope>\n"
+				}
+			]
+		},
+		{
+			"name": "http://localhost:8086/ws",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "text/xml; charset=utf-8"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<soap:Envelope \nxmlns:soap=\"http://schemas.xmlsoap.org/soap/envelope/\"\nxmlns:sch=\"http://ktelabs.ru/soap/ws\">\n  <soap:Body>\n    <sch:generateTimeSlotsRequest xmlns=\"http://ktelabs.ru/soap/ws\">\n      <sch:year>2010</sch:year>\n      <sch:month>11</sch:month>\n      <sch:day>14</sch:day>\n      <sch:periodMinutes>30</sch:periodMinutes>\n    </sch:generateTimeSlotsRequest>\n  </soap:Body>\n</soap:Envelope>\n",
+					"options": {
+						"raw": {
+							"language": "xml"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8086/ws",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8086",
+					"path": [
+						"ws"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "GeneratorPortSoap11BaseUrl",
+			"value": "http://localhost:8086",
+			"type": "any"
+		}
+	]
+}
