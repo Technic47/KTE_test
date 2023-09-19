@@ -1,6 +1,7 @@
 package ru.ktelabs.test.models;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.NotNull;
@@ -13,12 +14,12 @@ import java.util.UUID;
 @Entity
 public class Ticket extends AbstractEntity {
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Doctor doctor;
     @NotNull
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private TimeSlot timeSlot;
 
     public Ticket(Doctor doctor, Customer customer, TimeSlot timeSlot) {

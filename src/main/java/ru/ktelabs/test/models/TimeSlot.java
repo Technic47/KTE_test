@@ -20,7 +20,7 @@ public class TimeSlot extends AbstractEntity {
     private Calendar finishTime;
     @ManyToOne
     private Cabinet cabinet;
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     private Ticket ticket;
     private boolean occupied = false;
     @Transient
