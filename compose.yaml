@@ -37,7 +37,7 @@ services:
       - local_db
     restart: always
     ports:
-      - "8085:8080"
+      - "8085:8085"
     env_file:
       - .env
 
