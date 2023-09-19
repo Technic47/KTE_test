@@ -1,7 +1,6 @@
 package ru.ktelabs.test.services;
 
 import org.springframework.stereotype.Service;
-import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.Cabinet;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
@@ -60,35 +59,26 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
     }
 
     /**
-     * Create and set new Ticket to TimeSlot and occupy slot.
+     * Change occupied status for slot to true.
+     * Set Ticket to TimeSlot.
      *
-     * @param id     id of TimeSlot.
-     * @param ticket Ticket to set.
-     * @return modified TimeSlot.
+     * @param timeSlot timeSlot for changing status.
      */
-    public TimeSlot setTicket(Long id, Ticket ticket) {
-        TimeSlot slot = getById(id);
-        ticket = ticketService.save(ticket);
-        return updateTicket(slot, ticket);
+    public void occupyTimeSlot(TimeSlot timeSlot, Ticket ticket) {
+        timeSlot.setTicket(ticket);
+        timeSlot.setOccupied(true);
+        repository.save(timeSlot);
     }
 
     /**
-     * Set existing Ticket to TimeSlot and occupy slot.
+     * Change occupied status for slot to false.
      *
-     * @param id       id of TimeSlot.
-     * @param ticketId Ticket id to set.
-     * @return modified TimeSlot.
+     * @param timeSlot timeSlot for changing status.
      */
-    public TimeSlot setTicket(Long id, Long ticketId) {
-        TimeSlot slot = getById(id);
-        Ticket ticket = ticketService.getById(ticketId);
-        return updateTicket(slot, ticket);
-    }
-
-    private TimeSlot updateTicket(TimeSlot timeSlot, Ticket ticket) {
-        ticket.setTimeSlot(timeSlot);
-        timeSlot.setTicket(ticket);
-        return save(timeSlot);
+    public void freeTimeSlot(TimeSlot timeSlot){
+        timeSlot.setTicket(null);
+        timeSlot.setOccupied(false);
+        repository.save(timeSlot);
     }
 
     /**
@@ -112,11 +102,17 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         });
     }
 
-    public void removeTicket(TimeSlot timeSlot){
-        timeSlot.setTicket(null);
+    public void setTicket(TimeSlot timeSlot, Ticket ticket){
+        timeSlot.setTicket(ticket);
+        save(timeSlot);
     }
 
-    public void cleanTimeSlot(TimeSlot timeSlot){
+    public void removeTicket(TimeSlot timeSlot){
+        timeSlot.setTicket(null);
+        repository.save(timeSlot);
+    }
+
+    public void cleanTimeSlot(TimeSlot timeSlot) {
         timeSlot.setCabinet(null);
         timeSlot.setTicket(null);
         repository.save(timeSlot);

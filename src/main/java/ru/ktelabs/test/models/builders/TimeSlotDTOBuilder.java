@@ -5,9 +5,15 @@ import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import java.util.Calendar;
 
 public class TimeSlotDTOBuilder {
+    private Long id;
     private Calendar startTime;
     private Calendar finishTime;
     private int cabinetNumber;
+
+    public TimeSlotDTOBuilder setId(Long id) {
+        this.id = id;
+        return this;
+    }
 
     public TimeSlotDTOBuilder setStartTime(Calendar startTime) {
         this.startTime = startTime;
@@ -25,6 +31,6 @@ public class TimeSlotDTOBuilder {
     }
 
     public TimeSlotDTO createTimeSlotDTO() {
-        return new TimeSlotDTO(startTime, finishTime, cabinetNumber);
+        return new TimeSlotDTO(id, startTime, finishTime, cabinetNumber);
     }
 }

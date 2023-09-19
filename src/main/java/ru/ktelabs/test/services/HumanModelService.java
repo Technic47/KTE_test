@@ -2,7 +2,6 @@ package ru.ktelabs.test.services;
 
 import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.Ticket;
-import ru.ktelabs.test.models.TimeSlot;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CommonRepository;
 
@@ -19,32 +18,41 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
 
     public E addTicket(Long id, Ticket ticket) {
         E customer = getById(id);
-        return addTicketToCustomer(customer, ticket);
+        return addTicket(customer, ticket);
     }
 
     public E addTicket(UUID uuid, Ticket ticket) {
         E customer = getByUuid(uuid);
-        return addTicketToCustomer(customer, ticket);
+        return addTicket(customer, ticket);
     }
 
     public E removeTicket(Long id, Ticket ticket) {
         E customer = getById(id);
-        return removeTicketFromCustomer(customer, ticket);
+        return removeTicket(customer, ticket);
     }
 
     public E removeTicket(UUID uuid, Ticket ticket) {
         E customer = getByUuid(uuid);
-        return removeTicketFromCustomer(customer, ticket);
+        return removeTicket(customer, ticket);
     }
 
-    public E addTicketToCustomer(E customer, Ticket ticket) {
-        customer.getTickets().add(ticket);
-        return save(customer);
+    public void updateTicket(E human, Ticket oldTicket, Ticket newTicket) {
+        Set<Ticket> tickets = human.getTickets();
+        if (tickets.contains(oldTicket)) {
+            tickets.remove(oldTicket);
+            tickets.add(newTicket);
+        } else
+            throw new IllegalArgumentException(human.getClass().getSimpleName() + " does`t have ticket with id: " + oldTicket.getId());
     }
 
-    public E removeTicketFromCustomer(E customer, Ticket ticket) {
-        customer.getTickets().remove(ticket);
-        return save(customer);
+    public E addTicket(E human, Ticket ticket) {
+        human.getTickets().add(ticket);
+        return save(human);
+    }
+
+    public E removeTicket(E human, Ticket ticket) {
+        human.getTickets().remove(ticket);
+        return save(human);
     }
 
     protected List<TimeSlotDTO> getSlotsFromModel(HumanModel model) {

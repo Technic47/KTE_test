@@ -89,35 +89,35 @@ class TimeSlotServiceTest {
         assertThat(allInPeriod).isNotNull().hasSize(4);
     }
 
-    @Test
-    void setTicket() {
-        Long slotId = 1L;
-        Long ticketId = 10L;
-        Doctor doctor = new Doctor();
-        Customer customer = new Customer();
-        TimeSlot timeSlot = new TimeSlot();
-        Ticket ticket = new Ticket(doctor, customer, timeSlot);
-
-        doReturn(ticket)
-                .when(ticketService)
-                .getById(ticketId);
-
-        doReturn(Optional.of(timeSlot))
-                .when(repository)
-                .findById(slotId);
-
-        doReturn(timeSlot)
-                .when(repository)
-                .save(timeSlot);
-
-        service.setTicket(slotId, ticketId);
-
-        verify(ticketService).getById(ticketId);
-        verify(repository).findById(slotId);
-        verify(repository).save(any(TimeSlot.class));
-
-        assertThat(timeSlot.getTicket()).isNotNull().isEqualTo(ticket);
-    }
+//    @Test
+//    void setTicket() {
+//        Long slotId = 1L;
+//        Long ticketId = 10L;
+//        Doctor doctor = new Doctor();
+//        Customer customer = new Customer();
+//        TimeSlot timeSlot = new TimeSlot();
+//        Ticket ticket = new Ticket(doctor, customer, timeSlot);
+//
+//        doReturn(ticket)
+//                .when(ticketService)
+//                .getById(ticketId);
+//
+//        doReturn(Optional.of(timeSlot))
+//                .when(repository)
+//                .findById(slotId);
+//
+//        doReturn(timeSlot)
+//                .when(repository)
+//                .save(timeSlot);
+//
+//        service.setTicket(slotId, ticketId);
+//
+//        verify(ticketService).getById(ticketId);
+//        verify(repository).findById(slotId);
+//        verify(repository).save(any(TimeSlot.class));
+//
+//        assertThat(timeSlot.getTicket()).isNotNull().isEqualTo(ticket);
+//    }
 
     @Test
     void getFreeSlotsForCabinetAndDate() {

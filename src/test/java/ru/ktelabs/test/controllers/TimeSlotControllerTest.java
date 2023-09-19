@@ -48,7 +48,7 @@ class TimeSlotControllerTest {
         Calendar start = new GregorianCalendar(2022, Calendar.DECEMBER, 12, 18, 0);
         Calendar finish = new GregorianCalendar(2022, Calendar.DECEMBER, 12, 18, 30);
         ObjectMapper om = new ObjectMapper();
-        TimeSlotDTO newDto = new TimeSlotDTO(start, finish, 200);
+        TimeSlotDTO newDto = new TimeSlotDTO(1L, start, finish, 200);
         mockMvc.perform(post("/api/users/timeSlots")
                         .content(om.writeValueAsString(newDto))
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
@@ -79,7 +79,7 @@ class TimeSlotControllerTest {
         Calendar start = new GregorianCalendar(2022, Calendar.DECEMBER, 12, 18, 0);
         Calendar finish = new GregorianCalendar(2022, Calendar.DECEMBER, 12, 18, 30);
         ObjectMapper om = new ObjectMapper();
-        TimeSlotDTO newDto = new TimeSlotDTO(start, finish, 200);
+        TimeSlotDTO newDto = new TimeSlotDTO(1L, start, finish, 200);
         mockMvc.perform(put("/api/users/timeSlots/1")
                         .content(om.writeValueAsString(newDto))
                         .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))

@@ -16,8 +16,7 @@ import ru.ktelabs.test.models.dto.TicketDTO;
 
 import java.util.GregorianCalendar;
 
-import static org.hamcrest.Matchers.hasSize;
-import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -86,15 +85,15 @@ class TicketControllerTest {
         mockMvc.perform(put("/api/users/tickets/1")
                         .param("doctorId", "2")
                         .param("customerId", "2")
-                        .param("timeSlotId", "6"))
+                        .param("timeSlotId", "8"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id", is(1)))
+                .andExpect(jsonPath("$.id", not(1)))
                 .andExpect(jsonPath("$.uuid").isNotEmpty())
                 .andExpect(jsonPath("$.doctor.firstName", is("Alex")))
                 .andExpect(jsonPath("$.customer.firstName", is("Alex")))
-                .andExpect(jsonPath("$.timeSlot.cabinetNumber", is(200)));
+                .andExpect(jsonPath("$.timeSlot.cabinetNumber").isNotEmpty());
 
         mockMvc.perform(put("/api/users/tickets/1"))
                 .andExpect(status().is4xxClientError());

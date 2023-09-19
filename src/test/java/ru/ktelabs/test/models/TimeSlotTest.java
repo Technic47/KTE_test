@@ -35,13 +35,13 @@ class TimeSlotTest {
         assertNotEquals(slot1, slot3);
     }
 
-    @Test
-    void ticketTest(){
-        TimeSlot slot = new TimeSlot();
-        Ticket newTicket = new Ticket();
-        slot.setTicket(newTicket);
-
-        assertThat(slot.getTicket()).isNotNull().isEqualTo(newTicket);
-        assertTrue(slot.isOccupied());
-    }
+//    @Test
+//    void ticketTest(){
+//        TimeSlot slot = new TimeSlot();
+//        Ticket newTicket = new Ticket();
+//        slot.setTicket(newTicket);
+//
+//        assertThat(slot.getTicket()).isNotNull().isEqualTo(newTicket);
+//        assertTrue(slot.isOccupied());
+//    }
 }

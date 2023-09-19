@@ -138,4 +138,18 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
                 + " " + givenName
                 + " " + secondName;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof HumanModel)) return false;
+        if (!super.equals(o)) return false;
+        HumanModel that = (HumanModel) o;
+        return Objects.equals(firstName, that.firstName) && Objects.equals(secondName, that.secondName) && Objects.equals(givenName, that.givenName) && gender == that.gender && Objects.equals(birthDate, that.birthDate);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), firstName, secondName, givenName, gender, birthDate);
+    }
 }

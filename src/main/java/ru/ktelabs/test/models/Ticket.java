@@ -14,12 +14,15 @@ import java.util.UUID;
 @Entity
 public class Ticket extends AbstractEntity {
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+//            (fetch = FetchType.LAZY)
     private Doctor doctor;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
+//            (fetch = FetchType.LAZY)
     private Customer customer;
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne
+//            (fetch = FetchType.LAZY)
     private TimeSlot timeSlot;
 
     public Ticket(Doctor doctor, Customer customer, TimeSlot timeSlot) {
@@ -72,12 +75,13 @@ public class Ticket extends AbstractEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Ticket)) return false;
+        if (!super.equals(o)) return false;
         Ticket ticket = (Ticket) o;
         return Objects.equals(doctor, ticket.doctor) && Objects.equals(customer, ticket.customer) && Objects.equals(timeSlot, ticket.timeSlot);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(doctor, customer, timeSlot);
+        return Objects.hash(super.hashCode(), doctor, customer, timeSlot);
     }
 }

@@ -14,7 +14,7 @@ public class Cabinet extends AbstractEntity {
     @NotNull
     @Column(unique = true)
     private int number;
-    @OneToMany
+    @OneToMany(cascade = CascadeType.REMOVE)
     private Set<TimeSlot> timeslots;
 
     public Cabinet(int number) {
@@ -55,5 +55,19 @@ public class Cabinet extends AbstractEntity {
 
     public void setTimeslots(Set<TimeSlot> timeslots) {
         this.timeslots = timeslots;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Cabinet)) return false;
+        if (!super.equals(o)) return false;
+        Cabinet cabinet = (Cabinet) o;
+        return number == cabinet.number;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), number);
     }
 }

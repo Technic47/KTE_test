@@ -27,16 +27,12 @@ import java.util.concurrent.ExecutionException;
 public class TimeSlotController {
     private final TimeSlotService service;
     private final CabinetService cabinetService;
-    private final TicketService ticketService;
-    private final CustomerService customerService;
-    private final DoctorService doctorService;
+    private final TicketController ticketController;
 
-    protected TimeSlotController(TimeSlotService service, CabinetService cabinetService, TicketService ticketService, CustomerService customerService, DoctorService doctorService) {
+    protected TimeSlotController(TimeSlotService service, CabinetService cabinetService, TicketController ticketController) {
         this.service = service;
         this.cabinetService = cabinetService;
-        this.ticketService = ticketService;
-        this.customerService = customerService;
-        this.doctorService = doctorService;
+        this.ticketController = ticketController;
     }
 
     @Operation(summary = "Get all entities")
@@ -107,15 +103,13 @@ public class TimeSlotController {
         TimeSlot timeSlot = service.getById(id);
         Cabinet cabinet = timeSlot.getCabinet();
         Ticket ticket = timeSlot.getTicket();
-        service.removeTicket(timeSlot);
+//        service.removeTicket(timeSlot);
 
         if (ticket != null) {
-            customerService.removeTicketFromCustomer(ticket.getCustomer(), ticket);
-            doctorService.removeTicketFromCustomer(ticket.getDoctor(), ticket);
-            ticketService.removeTimeSlot(ticket);
+            ticketController.cleanUp(ticket);
         }
         cabinetService.removeSlot(cabinet, timeSlot);
-        service.cleanTimeSlot(timeSlot);
+//        service.cleanTimeSlot(timeSlot);
         boolean delete = service.delete(id);
         return ResponseEntity.ok(delete);
     }
@@ -144,21 +138,21 @@ public class TimeSlotController {
         }
     }
 
-    @Operation(summary = "Set Ticket")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Entity is updated",
-                    content = {@Content(mediaType = "application/json",
-                            schema = @Schema(implementation = TimeSlot.class))}),
-            @ApiResponse(responseCode = "403", description = "Access denied",
-                    content = @Content),
-            @ApiResponse(responseCode = "404", description = "Entity not found",
-                    content = @Content)})
-    @PostMapping("/{slotId}/ticket/{ticketId}")
-    public ResponseEntity<TimeSlotDTO> setTicket(@PathVariable Long slotId,
-                                                 @PathVariable Long ticketId) {
-        TimeSlot slot = service.setTicket(slotId, ticketId);
-        return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(slot));
-    }
+//    @Operation(summary = "Set Ticket")
+//    @ApiResponses(value = {
+//            @ApiResponse(responseCode = "200", description = "Entity is updated",
+//                    content = {@Content(mediaType = "application/json",
+//                            schema = @Schema(implementation = TimeSlot.class))}),
+//            @ApiResponse(responseCode = "403", description = "Access denied",
+//                    content = @Content),
+//            @ApiResponse(responseCode = "404", description = "Entity not found",
+//                    content = @Content)})
+//    @PostMapping("/{slotId}/ticket/{ticketId}")
+//    public ResponseEntity<TimeSlotDTO> setTicket(@PathVariable Long slotId,
+//                                                 @PathVariable Long ticketId) {
+//        TimeSlot slot = service.setTicket(slotId, ticketId);
+//        return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(slot));
+//    }
 
     @Operation(summary = "Get free timeSlots for cabinet for specified date")
     @ApiResponses(value = {

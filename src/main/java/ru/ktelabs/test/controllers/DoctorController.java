@@ -9,8 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Doctor;
-import ru.ktelabs.test.models.Ticket;
-import ru.ktelabs.test.models.dto.CustomerDTO;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.services.DoctorService;
@@ -23,8 +21,11 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/users/doctors")
 public class DoctorController extends AbstractController<Doctor, DoctorService, DoctorDTO> {
-    protected DoctorController(DoctorService service) {
+
+    private final TicketController ticketController;
+    protected DoctorController(DoctorService service, TicketController ticketController) {
         super(service);
+        this.ticketController = ticketController;
     }
 
     @Override
@@ -39,6 +40,13 @@ public class DoctorController extends AbstractController<Doctor, DoctorService, 
     public ResponseEntity<DoctorDTO> create(@RequestBody DoctorDTO newDTO) {
         Doctor saved = service.save(new Doctor(newDTO));
         return ResponseEntity.ok(DoctorDTO.createDoctorDTO(saved));
+    }
+
+    @Override
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+        Doctor doctor = service.getById(id);
+        ticketController.cleanUp(doctor.getTickets());
+        return super.delete(id);
     }
 
     @Operation(summary = "Get Tickets by doctorId")

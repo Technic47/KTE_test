@@ -8,13 +8,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.Customer;
-import ru.ktelabs.test.models.Doctor;
-import ru.ktelabs.test.models.TimeSlot;
-import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.CustomerDTO;
-import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.services.CustomerService;
+import ru.ktelabs.test.services.TicketService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +21,10 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/users/customers")
 public class CustomerController extends AbstractController<Customer, CustomerService, CustomerDTO> {
-    protected CustomerController(CustomerService service) {
+    private final TicketController ticketController;
+    protected CustomerController(CustomerService service, TicketController ticketController) {
         super(service);
+        this.ticketController = ticketController;
     }
 
     @Override
@@ -44,7 +43,8 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
 
     @Override
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
-
+        Customer customer = service.getById(id);
+        ticketController.cleanUp(customer.getTickets());
         return super.delete(id);
     }
 

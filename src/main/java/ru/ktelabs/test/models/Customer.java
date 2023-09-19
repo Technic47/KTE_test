@@ -9,7 +9,7 @@ import ru.ktelabs.test.models.dto.CustomerDTO;
 import java.util.*;
 
 @Entity
-public class Customer extends HumanModel implements TicketHandler{
+public class Customer extends HumanModel{
     public Customer(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate) {
         super(firstName, secondName, givenName, gender, birthDate);
     }
@@ -36,5 +36,4 @@ public class Customer extends HumanModel implements TicketHandler{
     public Customer() {
         super();
     }
-
 }
