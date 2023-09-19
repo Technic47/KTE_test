@@ -2,6 +2,7 @@ package ru.ktelabs.test.models;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.CabinetDTO;
 
@@ -12,6 +13,7 @@ import java.util.UUID;
 @Entity
 public class Cabinet extends AbstractEntity {
     @NotNull
+    @Positive
     @Column(unique = true)
     private int number;
     @OneToMany(cascade = CascadeType.REMOVE)

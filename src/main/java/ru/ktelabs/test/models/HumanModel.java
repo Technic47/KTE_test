@@ -3,8 +3,10 @@ package ru.ktelabs.test.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
-import ru.ktelabs.test.models.dto.AbstractDto;
+import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.PastOrPresent;
 
 import java.util.*;
 
@@ -13,25 +15,31 @@ import static ru.ktelabs.test.models.Gender.UNKNOWN;
 @MappedSuperclass
 public abstract class HumanModel extends AbstractEntity implements TicketHandler {
     @NotNull
+    @Max(100)
     protected String firstName;
     @NotNull
+    @Max(100)
     protected String secondName;
+    @Max(100)
     protected String givenName;
     @NotNull
     @JsonProperty(value = "gender")
     @Enumerated(EnumType.STRING)
     protected Gender gender;
+    @Past
     @JsonFormat(pattern = "yyyy-MM-DD")
     protected Calendar birthDate;
     @Transient
     protected int age;
+    @PastOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Calendar created;
+    @PastOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Calendar updated;
 
     @OneToMany
-//            (cascade = CascadeType.ALL)
+            (fetch = FetchType.LAZY)
     protected Set<Ticket> tickets;
 
     public HumanModel() {

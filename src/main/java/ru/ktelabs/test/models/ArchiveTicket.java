@@ -15,7 +15,6 @@ public class ArchiveTicket {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     private Long oldId;
     private UUID uuid;
     private Long doctorId;

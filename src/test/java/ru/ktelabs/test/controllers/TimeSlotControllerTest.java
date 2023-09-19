@@ -134,17 +134,6 @@ class TimeSlotControllerTest {
     }
 
     @Test
-    void setTicket() throws Exception {
-        mockMvc.perform(post("/api/users/timeSlots/2/ticket/2"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.startTime").isNotEmpty())
-                .andExpect(jsonPath("$.finishTime").isNotEmpty())
-                .andExpect(jsonPath("$.cabinetNumber", is(100)));
-    }
-
-    @Test
     void freeSlots() throws Exception {
         mockMvc.perform(get("/api/users/timeSlots/free")
                         .param("cabinetNumber", "100")
@@ -154,14 +143,14 @@ class TimeSlotControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(17)));
+                .andExpect(jsonPath("$", hasSize(4)));
 
         mockMvc.perform(get("/api/users/timeSlots/free")
                         .param("cabinetNumber", "200")
                         .param("year", "2023")
                         .param("month", "10")
                         .param("day", "16"))
-                .andExpect(jsonPath("$", hasSize(1)));
+                .andExpect(jsonPath("$", hasSize(2)));
     }
 
     @Test
@@ -173,7 +162,7 @@ class TimeSlotControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(18)));
+                .andExpect(jsonPath("$", hasSize(6)));
 
         mockMvc.perform(get("/api/users/timeSlots/free"))
                 .andExpect(status().is4xxClientError());

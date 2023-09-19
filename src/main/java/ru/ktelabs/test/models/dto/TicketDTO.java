@@ -13,6 +13,7 @@ public class TicketDTO extends AbstractDto {
     private DoctorDTO doctor;
     @NotNull
     private CustomerDTO customer;
+    @NotNull
     private TimeSlotDTO timeSlot;
 
     public TicketDTO(Ticket ticket) {

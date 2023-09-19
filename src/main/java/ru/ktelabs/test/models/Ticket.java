@@ -15,14 +15,14 @@ import java.util.UUID;
 public class Ticket extends AbstractEntity {
     @NotNull
     @ManyToOne
-//            (fetch = FetchType.LAZY)
+            (fetch = FetchType.LAZY)
     private Doctor doctor;
     @NotNull
     @ManyToOne
-//            (fetch = FetchType.LAZY)
+            (fetch = FetchType.LAZY)
     private Customer customer;
     @OneToOne
-//            (fetch = FetchType.LAZY)
+            (fetch = FetchType.LAZY)
     private TimeSlot timeSlot;
 
     public Ticket(Doctor doctor, Customer customer, TimeSlot timeSlot) {

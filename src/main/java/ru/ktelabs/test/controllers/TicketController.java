@@ -52,6 +52,8 @@ public class TicketController {
                             schema = @Schema(implementation = TicketDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content),
+            @ApiResponse(responseCode = "400", description = "TimeSlot occupied",
+                    content = @Content),
             @ApiResponse(responseCode = "404", description = "Entity not found",
                     content = @Content)})
     @PostMapping()
@@ -60,16 +62,23 @@ public class TicketController {
             @RequestParam(name = "customerId") Long customerId,
             @RequestParam(name = "timeSlotId") Long timeSlotId
     ) {
-        Doctor doctor = doctorService.getById(doctorId);
-        Customer customer = customerService.getById(customerId);
+
         TimeSlot timeSlot = timeSlotService.getById(timeSlotId);
 
-        Ticket saved = service.save(new Ticket(doctor, customer, timeSlot));
-        customerService.addTicket(customer, saved);
-        doctorService.addTicket(doctor, saved);
-        timeSlotService.occupyTimeSlot(timeSlot, saved);
+        if (timeSlot.isOccupied()) {
+            throw new IllegalArgumentException("TimeSlot with id: " + timeSlotId + " is occupied");
+        } else {
+            Doctor doctor = doctorService.getById(doctorId);
+            Customer customer = customerService.getById(customerId);
 
-        return ResponseEntity.ok(new TicketDTO(saved));
+            Ticket saved = service.save(new Ticket(doctor, customer, timeSlot));
+
+            customerService.addTicket(customer, saved);
+            doctorService.addTicket(doctor, saved);
+            timeSlotService.occupyTimeSlot(timeSlot, saved);
+
+            return ResponseEntity.ok(new TicketDTO(saved));
+        }
     }
 
     @Operation(summary = "Get entity by id")
@@ -92,9 +101,9 @@ public class TicketController {
                             schema = @Schema(implementation = TicketDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Ticket not found",
+            @ApiResponse(responseCode = "400", description = "TimeSlot occupied",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "TimeSlot occupied",
+            @ApiResponse(responseCode = "404", description = "Ticket not found",
                     content = @Content)})
     @PutMapping("/{id}")
     public ResponseEntity<TicketDTO> update(@PathVariable Long id,

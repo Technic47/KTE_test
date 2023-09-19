@@ -50,6 +50,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserModel adminUser = new UserModel();
         adminUser.setUsername(adminName);
         adminUser.setPassword(adminPass);
+        adminUser.setEmail("AdminIsDumb!");
         this.userService.createAdmin(adminUser);
         this.adminName = "***";
         this.adminPass = "***";

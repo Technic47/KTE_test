@@ -38,7 +38,7 @@ class TicketControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(12)));
     }
 
     @Test
@@ -46,22 +46,30 @@ class TicketControllerTest {
         mockMvc.perform(post("/api/users/tickets")
                         .param("doctorId", "1")
                         .param("customerId", "1")
-                        .param("timeSlotId", "11"))
+                        .param("timeSlotId", "4"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$.id", is(5)))
+                .andExpect(jsonPath("$.id", is(13)))
                 .andExpect(jsonPath("$.uuid").isNotEmpty())
                 .andExpect(jsonPath("$.doctor.firstName", is("Ivan")))
                 .andExpect(jsonPath("$.customer.firstName", is("Ivan")))
                 .andExpect(jsonPath("$.timeSlot.cabinetNumber", is(100)));
 
         mockMvc.perform(get("/api/users/tickets"))
-                .andExpect(jsonPath("$", hasSize(5)));
+                .andExpect(jsonPath("$", hasSize(13)));
 
+        //error - slot occupied
+        mockMvc.perform(post("/api/users/tickets")
+                        .param("doctorId", "2")
+                        .param("customerId", "2")
+                        .param("timeSlotId", "3"))
+                .andExpect(status().is4xxClientError());
+
+        //error - no params.
         mockMvc.perform(post("/api/users/tickets"))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 
     @Test
@@ -95,11 +103,28 @@ class TicketControllerTest {
                 .andExpect(jsonPath("$.customer.firstName", is("Alex")))
                 .andExpect(jsonPath("$.timeSlot.cabinetNumber").isNotEmpty());
 
+        //error - slot occupied
+        mockMvc.perform(put("/api/users/tickets/1")
+                .param("doctorId", "2")
+                .param("customerId", "2")
+                .param("timeSlotId", "3"))
+                .andExpect(status().is4xxClientError());
+
         mockMvc.perform(put("/api/users/tickets/1"))
+                .andExpect(status().is4xxClientError());
+
+        mockMvc.perform(put("/api/users/tickets/111"))
                 .andExpect(status().is4xxClientError());
     }
 
-//    @Test
-//    void delete() {
-//    }
+    @Test
+    void deleteTest() throws Exception {
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+
+        mockMvc.perform(delete("/api/users/tickets/111"))
+                .andExpect(status().is4xxClientError());
+    }
 }

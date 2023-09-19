@@ -15,9 +15,5 @@ create table customer_tickets
 alter table customer_tickets
     owner to postgres;
 
-create unique index customer_tickets_pkey
-    on customer_tickets using ??? (customer_id, tickets_id);
-
-create unique index uk_eam6my5rg3njhj27u4hfjjnod
-    on customer_tickets using ??? (tickets_id);
-
+INSERT INTO public.customer_tickets (customer_id, tickets_id) VALUES (1, 21);
+INSERT INTO public.customer_tickets (customer_id, tickets_id) VALUES (1, 23);

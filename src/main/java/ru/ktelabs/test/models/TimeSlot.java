@@ -21,7 +21,6 @@ public class TimeSlot extends AbstractEntity {
     @ManyToOne
     private Cabinet cabinet;
     @OneToOne
-//            (cascade = CascadeType.ALL)
     private Ticket ticket;
     private boolean occupied = false;
     @Transient

@@ -13,4 +13,4 @@ create table user_role
 alter table user_role
     owner to postgres;
 
-INSERT INTO public.user_role (user_id, status) VALUES (202, 'ROLE_ADMIN');
+INSERT INTO public.user_role (user_id, status) VALUES (1, 'ROLE_ADMIN');

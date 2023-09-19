@@ -81,9 +81,9 @@ VALUES (DEFAULT, 'b656f70d-606c-4e1f-a093-8c1f0120feb8', '2023-10-16 09:30:00', 
        (DEFAULT, 'c3b1b774-598f-4282-a32b-6d1d3d67f6ba', '2023-10-16 12:30:00', true,
         '2023-10-16 12:00:00', 1),
        (DEFAULT, 'a4218336-cc87-4f16-8110-283fe26474fd', '2023-10-16 13:00:00', false,
-        '2023-10-16 12:30:00', 1),
+        '2023-10-16 12:30:00', 2),
        (DEFAULT, '2e55acc7-b265-4a83-9380-353f13f29161', '2023-10-16 13:30:00', false,
-        '2023-10-16 13:00:00', 1),
+        '2023-10-16 13:00:00', 2),
        (DEFAULT, 'f17d9377-17b4-45dd-8871-2e6fb205eab6', '2023-10-16 14:00:00', true,
         '2023-10-16 13:30:00', 1),
        (DEFAULT, 'ffd7706c-55bc-42f2-bedc-24e26d0da766', '2023-10-16 14:30:00', true,
@@ -136,6 +136,19 @@ VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 2, 1, 7),
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 3, 2, 12),
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 4, 2, 17);
+
+UPDATE time_slot SET ticket_id = 1 WHERE id = 1;
+UPDATE time_slot SET ticket_id = 2 WHERE id = 5;
+UPDATE time_slot SET ticket_id = 3 WHERE id = 10;
+UPDATE time_slot SET ticket_id = 4 WHERE id = 15;
+UPDATE time_slot SET ticket_id = 5 WHERE id = 2;
+UPDATE time_slot SET ticket_id = 6 WHERE id = 6;
+UPDATE time_slot SET ticket_id = 7 WHERE id = 11;
+UPDATE time_slot SET ticket_id = 8 WHERE id = 16;
+UPDATE time_slot SET ticket_id = 9 WHERE id = 3;
+UPDATE time_slot SET ticket_id = 10 WHERE id = 7;
+UPDATE time_slot SET ticket_id = 11 WHERE id = 12;
+UPDATE time_slot SET ticket_id = 12 WHERE id = 17;
 
 INSERT INTO customer_tickets (customer_id, tickets_id)
 VALUES (1, 1),

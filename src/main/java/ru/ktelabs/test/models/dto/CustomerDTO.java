@@ -5,7 +5,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Past;
 import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Gender;
 import ru.ktelabs.test.models.builders.CustomerDTOBuilder;
@@ -16,14 +18,18 @@ import java.util.Calendar;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CustomerDTO extends AbstractDto {
     @NotNull
+    @Max(100)
     private String firstName;
     @NotNull
+    @Max(100)
     private String secondName;
+    @Max(100)
     private String givenName;
     @NotNull
     @JsonProperty(value = "gender")
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Past
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Calendar birthDate;
 

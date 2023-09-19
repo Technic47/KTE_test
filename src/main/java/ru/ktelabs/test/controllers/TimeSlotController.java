@@ -6,6 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.Cabinet;
@@ -54,7 +55,7 @@ public class TimeSlotController {
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content)})
     @PostMapping()
-    public ResponseEntity<TimeSlotDTO> create(@RequestBody TimeSlotDTO newDTO) {
+    public ResponseEntity<TimeSlotDTO> create(@Valid @RequestBody TimeSlotDTO newDTO) {
         Cabinet cabinet = cabinetService.findByNumber(newDTO.getCabinetNumber());
         TimeSlot saved = service.save(new TimeSlot(newDTO, cabinet));
         return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(saved));
@@ -73,43 +74,47 @@ public class TimeSlotController {
         return ResponseEntity.ok(new TimeSlotShowDTO(found));
     }
 
-    @Operation(summary = "Update entity")
+    @Operation(summary = "Update TimeSlot")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Entity is updated",
+            @ApiResponse(responseCode = "200", description = "TimeSlot is updated",
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = TimeSlotShowDTO.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Entity not found",
+            @ApiResponse(responseCode = "404", description = "TimeSlot not found",
                     content = @Content)})
     @PutMapping("/{id}")
     public ResponseEntity<TimeSlotShowDTO> update(@PathVariable Long id,
                                                   @RequestBody TimeSlotDTO newItem) {
-        Cabinet cabinet = cabinetService.findByNumber(newItem.getCabinetNumber());
+        int number = newItem.getCabinetNumber();
+        Cabinet cabinet = cabinetService.findByNumber(number);
         TimeSlot old = service.getById(id);
         TimeSlot updated = new TimeSlot(newItem, cabinet);
+
+        cabinetService.removeSlot(old.getCabinet(), old);
         updated = service.update(old, updated);
+        cabinetService.addSlot(number, updated);
+
         return ResponseEntity.ok(new TimeSlotShowDTO(updated));
     }
 
-    @Operation(summary = "Delete entity")
+    @Operation(summary = "Delete TimeSlot")
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Entity is deleted",
+            @ApiResponse(responseCode = "200", description = "TimeSlot is deleted",
                     content = @Content),
-            @ApiResponse(responseCode = "404", description = "Entity not found",
+            @ApiResponse(responseCode = "404", description = "TimeSlot not found",
                     content = @Content)})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
         TimeSlot timeSlot = service.getById(id);
         Cabinet cabinet = timeSlot.getCabinet();
         Ticket ticket = timeSlot.getTicket();
-//        service.removeTicket(timeSlot);
 
         if (ticket != null) {
+            service.removeTicket(timeSlot);
             ticketController.cleanUp(ticket);
         }
         cabinetService.removeSlot(cabinet, timeSlot);
-//        service.cleanTimeSlot(timeSlot);
         boolean delete = service.delete(id);
         return ResponseEntity.ok(delete);
     }
@@ -137,22 +142,6 @@ public class TimeSlotController {
             throw new RuntimeException(e);
         }
     }
-
-//    @Operation(summary = "Set Ticket")
-//    @ApiResponses(value = {
-//            @ApiResponse(responseCode = "200", description = "Entity is updated",
-//                    content = {@Content(mediaType = "application/json",
-//                            schema = @Schema(implementation = TimeSlot.class))}),
-//            @ApiResponse(responseCode = "403", description = "Access denied",
-//                    content = @Content),
-//            @ApiResponse(responseCode = "404", description = "Entity not found",
-//                    content = @Content)})
-//    @PostMapping("/{slotId}/ticket/{ticketId}")
-//    public ResponseEntity<TimeSlotDTO> setTicket(@PathVariable Long slotId,
-//                                                 @PathVariable Long ticketId) {
-//        TimeSlot slot = service.setTicket(slotId, ticketId);
-//        return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(slot));
-//    }
 
     @Operation(summary = "Get free timeSlots for cabinet for specified date")
     @ApiResponses(value = {

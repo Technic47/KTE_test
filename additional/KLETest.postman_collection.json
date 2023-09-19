@@ -10,7 +10,7 @@
 			"name": "Doctors",
 			"item": [
 				{
-					"name": "Doctor Post",
+					"name": "Doctor create",
 					"request": {
 						"method": "POST",
 						"header": [
@@ -22,7 +22,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"firstName\": \"Alex\",\r\n    \"secondName\": \"Stone\",\r\n    \"birthDate\": \"1985-12-06\",\r\n    \"gender\": \"MALE\",\r\n    \"speciality\": \"dentist\"\r\n}",
+							"raw": "{\r\n    \"firstName\": \"Doctor5\",\r\n    \"secondName\": \"Stones\",\r\n    \"birthDate\": \"1985-12-06\",\r\n    \"gender\": \"MALE\",\r\n    \"speciality\": \"dentist\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -79,6 +79,34 @@
 								"api",
 								"users",
 								"doctors"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Doctor delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/doctors/2",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"doctors",
+								"2"
 							]
 						}
 					},
@@ -163,6 +191,63 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "Customer delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/customers/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"customers",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Customer get tickets",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/customers/1/slots",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"customers",
+								"1",
+								"slots"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -239,6 +324,34 @@
 								"api",
 								"users",
 								"cabinets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cabinet delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/cabinets/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"cabinets",
+								"4"
 							]
 						}
 					},
@@ -431,6 +544,34 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "TimeSlot delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/cabinets/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"cabinets",
+								"4"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -453,17 +594,17 @@
 							"formdata": [
 								{
 									"key": "doctorId",
-									"value": "252",
+									"value": "4",
 									"type": "text"
 								},
 								{
 									"key": "customerId",
-									"value": "2",
+									"value": "1",
 									"type": "text"
 								},
 								{
 									"key": "timeSlotId",
-									"value": "10937",
+									"value": "16",
 									"type": "text"
 								}
 							]
@@ -479,6 +620,54 @@
 								"api",
 								"users",
 								"tickets"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ticket update",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "doctorId",
+									"value": "4",
+									"type": "text"
+								},
+								{
+									"key": "customerId",
+									"value": "1",
+									"type": "text"
+								},
+								{
+									"key": "timeSlotId",
+									"value": "16",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:8085/api/users/tickets/23",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"tickets",
+								"23"
 							]
 						}
 					},
@@ -558,6 +747,34 @@
 								"users",
 								"tickets",
 								"3"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Ticket delete",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer_{{KLE-token}}",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://localhost:8085/api/users/tickets/16",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8085",
+							"path": [
+								"api",
+								"users",
+								"tickets",
+								"16"
 							]
 						}
 					},

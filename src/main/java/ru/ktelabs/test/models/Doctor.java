@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.DoctorDTO;
@@ -14,6 +15,7 @@ import java.util.*;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Doctor extends HumanModel {
     @NotNull
+    @Max(150)
     private String speciality;
 
     public Doctor(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, String speciality) {
