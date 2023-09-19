@@ -14,29 +14,39 @@ VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 200);
 
 INSERT INTO customer (id, uuid, birth_date, created, first_name, gender, given_name, second_name, updated)
-VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Alex', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Alex',
+        'MALE',
         '', 'Ivanov', '2023-06-20'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20');
 
 INSERT INTO doctor (id, uuid, birth_date, created, first_name, gender, given_name, second_name, updated, speciality)
-VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20', 'dentist'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Alex', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Alex',
+        'MALE',
         '', 'Ivanov', '2023-06-20', 'dentist'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20', 'dentist'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan', 'MALE',
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), '1990-06-20', '2023-06-20', 'Ivan',
+        'MALE',
         '', 'Ivanov', '2023-06-20', 'dentist');
 
 INSERT INTO user_model (id, uuid, active, created, email, enabled, password, updated, username)
-VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email@mail.il', true,
+VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email@mail.il',
+        true,
         'pass', '2023-06-20', 'pavel'),
-       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email2@mail.il', true,
+       (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email2@mail.il',
+        true,
         'pass', '2023-06-20', 'user');
 
 INSERT INTO user_role (user_id, status)
@@ -106,6 +116,22 @@ VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 2, 1, 5),
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 1, 2, 10),
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 2, 2, 15);
+
+UPDATE time_slot
+SET ticket_id = 1
+WHERE id = 1;
+
+UPDATE time_slot
+SET ticket_id = 2
+WHERE id = 5;
+
+UPDATE time_slot
+SET ticket_id = 3
+WHERE id = 10;
+
+UPDATE time_slot
+SET ticket_id = 4
+WHERE id = 15;
 
 INSERT INTO customer_tickets (customer_id, tickets_id)
 VALUES (1, 1),

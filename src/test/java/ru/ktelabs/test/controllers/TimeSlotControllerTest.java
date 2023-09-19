@@ -91,9 +91,13 @@ class TimeSlotControllerTest {
                 .andExpect(jsonPath("$.cabinetNumber", is(200)));
     }
 
-//    @Test
-//    void delete() {
-//    }
+    @Test
+    void deleteTest() throws Exception {
+        mockMvc.perform(delete("/api/users/timeSlots/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
 
     @Test
     void populate() throws Exception {

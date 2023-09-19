@@ -9,12 +9,11 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.models.Cabinet;
+import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
-import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
-import ru.ktelabs.test.services.CabinetService;
-import ru.ktelabs.test.services.TimeSlotService;
+import ru.ktelabs.test.services.*;
 
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -25,13 +24,19 @@ import java.util.concurrent.ExecutionException;
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
 @RequestMapping("/api/users/timeSlots")
-public class TimeSlotController{
+public class TimeSlotController {
     private final TimeSlotService service;
     private final CabinetService cabinetService;
+    private final TicketService ticketService;
+    private final CustomerService customerService;
+    private final DoctorService doctorService;
 
-    protected TimeSlotController(TimeSlotService service, CabinetService cabinetService) {
+    protected TimeSlotController(TimeSlotService service, CabinetService cabinetService, TicketService ticketService, CustomerService customerService, DoctorService doctorService) {
         this.service = service;
         this.cabinetService = cabinetService;
+        this.ticketService = ticketService;
+        this.customerService = customerService;
+        this.doctorService = doctorService;
     }
 
     @Operation(summary = "Get all entities")
@@ -83,7 +88,7 @@ public class TimeSlotController{
                     content = @Content)})
     @PutMapping("/{id}")
     public ResponseEntity<TimeSlotShowDTO> update(@PathVariable Long id,
-                                    @RequestBody TimeSlotDTO newItem) {
+                                                  @RequestBody TimeSlotDTO newItem) {
         Cabinet cabinet = cabinetService.findByNumber(newItem.getCabinetNumber());
         TimeSlot old = service.getById(id);
         TimeSlot updated = new TimeSlot(newItem, cabinet);
@@ -99,6 +104,18 @@ public class TimeSlotController{
                     content = @Content)})
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Boolean> delete(@PathVariable("id") Long id) {
+        TimeSlot timeSlot = service.getById(id);
+        Cabinet cabinet = timeSlot.getCabinet();
+        Ticket ticket = timeSlot.getTicket();
+        service.removeTicket(timeSlot);
+
+        if (ticket != null) {
+            customerService.removeTicketFromCustomer(ticket.getCustomer(), ticket);
+            doctorService.removeTicketFromCustomer(ticket.getDoctor(), ticket);
+            ticketService.removeTimeSlot(ticket);
+        }
+        cabinetService.removeSlot(cabinet, timeSlot);
+        service.cleanTimeSlot(timeSlot);
         boolean delete = service.delete(id);
         return ResponseEntity.ok(delete);
     }
@@ -138,7 +155,7 @@ public class TimeSlotController{
                     content = @Content)})
     @PostMapping("/{slotId}/ticket/{ticketId}")
     public ResponseEntity<TimeSlotDTO> setTicket(@PathVariable Long slotId,
-                                              @PathVariable Long ticketId) {
+                                                 @PathVariable Long ticketId) {
         TimeSlot slot = service.setTicket(slotId, ticketId);
         return ResponseEntity.ok(TimeSlotDTO.createTimeSlotDTO(slot));
     }

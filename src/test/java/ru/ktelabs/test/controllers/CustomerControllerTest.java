@@ -22,8 +22,7 @@ import java.util.GregorianCalendar;
 
 import static org.hamcrest.Matchers.*;
 import static org.junit.jupiter.api.Assertions.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static ru.ktelabs.test.models.Gender.FEMALE;
@@ -68,6 +67,14 @@ class CustomerControllerTest {
 
         mockMvc.perform(get("/api/users/customers"))
                 .andExpect(jsonPath("$", hasSize(5)));
+    }
+
+    @Test
+    void deleteTest() throws Exception{
+        mockMvc.perform(delete("/api/users/customers/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
     }
 
     @Test

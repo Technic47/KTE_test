@@ -1,6 +1,7 @@
 package ru.ktelabs.test.services;
 
 import org.springframework.stereotype.Service;
+import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.Cabinet;
 import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.TimeSlot;
@@ -9,10 +10,7 @@ import ru.ktelabs.test.models.dto.TimeSlotShowDTO;
 import ru.ktelabs.test.repositories.TimeSlotRepository;
 
 import java.time.YearMonth;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 
@@ -91,6 +89,37 @@ public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepositor
         ticket.setTimeSlot(timeSlot);
         timeSlot.setTicket(ticket);
         return save(timeSlot);
+    }
+
+    /**
+     * Multi - delete procedure.
+     *
+     * @param slots TimeSlots to delete.
+     */
+    public void deleteManySlots(Collection<TimeSlot> slots) {
+        slots.forEach(item -> delete(item.getId()));
+    }
+
+    /**
+     * Clean 'cabinet' field for each TimeSlot.
+     *
+     * @param slots slots for cleanUp.
+     */
+    public void cleanSlots(Collection<TimeSlot> slots) {
+        slots.forEach(item -> {
+            item.setCabinet(null);
+            save(item);
+        });
+    }
+
+    public void removeTicket(TimeSlot timeSlot){
+        timeSlot.setTicket(null);
+    }
+
+    public void cleanTimeSlot(TimeSlot timeSlot){
+        timeSlot.setCabinet(null);
+        timeSlot.setTicket(null);
+        repository.save(timeSlot);
     }
 
     /**

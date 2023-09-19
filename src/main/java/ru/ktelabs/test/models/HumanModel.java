@@ -67,7 +67,6 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
     }
 
 
-
     public String getFirstName() {
         return firstName;
     }
@@ -132,5 +131,11 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
 
     public void setTickets(Set<Ticket> tickets) {
         this.tickets = tickets;
+    }
+
+    public String getCredentials() {
+        return firstName
+                + " " + givenName
+                + " " + secondName;
     }
 }

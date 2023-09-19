@@ -60,4 +60,8 @@ public class CabinetService extends AbstractService<Cabinet, CabinetRepository> 
         cabinet.getTimeslots().remove(slot);
         return save(cabinet);
     }
+    public void removeSlot(Cabinet cabinet, TimeSlot slot){
+        cabinet.getTimeslots().remove(slot);
+        save(cabinet);
+    }
 }

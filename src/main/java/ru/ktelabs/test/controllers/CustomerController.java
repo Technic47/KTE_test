@@ -42,6 +42,12 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
         return ResponseEntity.ok(CustomerDTO.createCustomerDTO(saved));
     }
 
+    @Override
+    public ResponseEntity<Boolean> delete(@PathVariable Long id) {
+
+        return super.delete(id);
+    }
+
     @Operation(summary = "Get TimeSlots by customerId")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "TimeSlots loaded",

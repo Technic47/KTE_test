@@ -56,29 +56,4 @@ public abstract class AbstractService<E extends AbstractEntity, R extends Common
             return true;
         } else throw new ResourceNotFoundException(id);
     }
-//
-//    @Autowired
-//    private void setDoctorService(DoctorService doctorService) {
-//        this.doctorService = doctorService;
-//    }
-//
-//    @Autowired
-//    private void setCustomerService(CustomerService customerService) {
-//        this.customerService = customerService;
-//    }
-//
-//    @Autowired
-//    private void setTimeSlotService(TimeSlotService timeSlotService) {
-//        this.timeSlotService = timeSlotService;
-//    }
-//
-//    @Autowired
-//    private void setTicketService(TicketService ticketService) {
-//        this.ticketService = ticketService;
-//    }
-//
-//    @Autowired
-//    private void setCabinetService(CabinetService cabinetService) {
-//        this.cabinetService = cabinetService;
-//    }
 }

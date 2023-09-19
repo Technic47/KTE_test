@@ -94,11 +94,11 @@ class CabinetControllerTest {
                 .andExpect(jsonPath("$.number", is(300)));
     }
 
-//    @Test
-//    void deleteTest() throws Exception {
-//        mockMvc.perform(delete("/api/users/cabinets/1"))
-//                .andDo(print())
-//                .andExpect(status().isOk())
-//                .andExpect(content().string("true"));
-//    }
+    @Test
+    void deleteTest() throws Exception {
+        mockMvc.perform(delete("/api/users/cabinets/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().string("true"));
+    }
 }
