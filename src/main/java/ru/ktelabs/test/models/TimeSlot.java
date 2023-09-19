@@ -20,7 +20,8 @@ public class TimeSlot extends AbstractEntity {
     private Calendar finishTime;
     @ManyToOne
     private Cabinet cabinet;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
+//            (cascade = CascadeType.ALL)
     private Ticket ticket;
     private boolean occupied = false;
     @Transient
@@ -116,11 +117,11 @@ public class TimeSlot extends AbstractEntity {
         if (!(o instanceof TimeSlot)) return false;
         if (!super.equals(o)) return false;
         TimeSlot timeSlot = (TimeSlot) o;
-        return Objects.equals(startTime, timeSlot.startTime) && Objects.equals(finishTime, timeSlot.finishTime) && Objects.equals(cabinet, timeSlot.cabinet) && Objects.equals(ticket, timeSlot.ticket);
+        return Objects.equals(startTime, timeSlot.startTime) && Objects.equals(finishTime, timeSlot.finishTime) && Objects.equals(cabinet, timeSlot.cabinet);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(super.hashCode(), startTime, finishTime, cabinet, ticket);
+        return Objects.hash(super.hashCode(), startTime, finishTime, cabinet);
     }
 }

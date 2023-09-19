@@ -46,7 +46,8 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
     }
 
     public E addTicket(E human, Ticket ticket) {
-        human.getTickets().add(ticket);
+        Set<Ticket> tickets = human.getTickets();
+        tickets.add(ticket);
         return save(human);
     }
 

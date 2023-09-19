@@ -30,7 +30,8 @@ public abstract class HumanModel extends AbstractEntity implements TicketHandler
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     protected Calendar updated;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany
+//            (cascade = CascadeType.ALL)
     protected Set<Ticket> tickets;
 
     public HumanModel() {

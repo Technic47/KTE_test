@@ -74,9 +74,8 @@ public class Ticket extends AbstractEntity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Ticket)) return false;
+        if (!(o instanceof Ticket ticket)) return false;
         if (!super.equals(o)) return false;
-        Ticket ticket = (Ticket) o;
         return Objects.equals(doctor, ticket.doctor) && Objects.equals(customer, ticket.customer) && Objects.equals(timeSlot, ticket.timeSlot);
     }
 
