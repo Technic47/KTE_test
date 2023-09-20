@@ -9,4 +9,5 @@ import java.util.Optional;
 @Repository
 public interface CabinetRepository extends CommonRepository<Cabinet> {
     Optional<Cabinet> findByNumber(@NotNull int number);
+    boolean existsByNumber(int number);
 }

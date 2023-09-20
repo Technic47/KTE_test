@@ -1,6 +1,7 @@
 package ru.ktelabs.test.models.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import ru.ktelabs.test.models.Cabinet;
@@ -10,6 +11,7 @@ import java.util.UUID;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class CabinetDTO extends AbstractDto {
     @Positive
+    @NotNull
     private int number;
 
     public CabinetDTO(int number) {

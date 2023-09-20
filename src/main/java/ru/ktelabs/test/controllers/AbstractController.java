@@ -41,6 +41,8 @@ public abstract class AbstractController<
                     content = {@Content(mediaType = "application/json",
                             schema = @Schema(implementation = AbstractEntity.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid request Body",
+                    content = @Content),
+            @ApiResponse(responseCode = "400", description = "Entity already exists",
                     content = @Content)})
     @PostMapping()
     public abstract ResponseEntity<T> create(@RequestBody T newDTO);

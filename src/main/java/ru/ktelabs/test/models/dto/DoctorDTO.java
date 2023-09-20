@@ -8,6 +8,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Past;
+import jakarta.validation.constraints.Size;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Gender;
 import ru.ktelabs.test.models.builders.DoctorDTOBuilder;
@@ -17,12 +18,12 @@ import java.util.Calendar;
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class DoctorDTO extends AbstractDto {
     @NotNull
-    @Max(100)
+    @Size(max = 100)
     private String firstName;
     @NotNull
-    @Max(100)
+    @Size(max = 100)
     private String secondName;
-    @Max(100)
+    @Size(max = 100)
     private String givenName;
     @NotNull
     @JsonProperty(value = "gender")
@@ -32,7 +33,7 @@ public class DoctorDTO extends AbstractDto {
     @JsonFormat(pattern = "yyyy-MM-DD")
     private Calendar birthDate;
     @NotNull
-    @Max(150)
+    @Size(max = 150)
     private String speciality;
 
     public DoctorDTO(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, String speciality) {

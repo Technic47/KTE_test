@@ -2,13 +2,14 @@ package ru.ktelabs.test.models.dto;
 
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 public class AuthenticationRequestDto {
     @NotEmpty
-    @Max(100)
+    @Size(max = 100)
     protected String username;
     @NotEmpty
-    @Max(100)
+    @Size(max = 100)
     protected String password;
 
     public AuthenticationRequestDto(String username, String password) {

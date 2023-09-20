@@ -5,10 +5,7 @@ import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.AbstractEntity;
 import ru.ktelabs.test.repositories.CommonRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
         implements CommonService<E> {

@@ -71,7 +71,7 @@ class DoctorControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(6)));
     }
 
     @Test
@@ -81,7 +81,7 @@ class DoctorControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(2)));
+                .andExpect(jsonPath("$", hasSize(6)));
 
         mockMvc.perform(get("/api/users/doctors/tickets"))
                 .andDo(print())

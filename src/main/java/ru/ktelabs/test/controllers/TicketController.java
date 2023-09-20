@@ -18,6 +18,7 @@ import ru.ktelabs.test.services.TimeSlotService;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 @Tag(name = "Tickets", description = "The Ticket API")
 @RestController
@@ -117,7 +118,7 @@ public class TicketController {
         if (timeSlot.isOccupied()) {
             throw new IllegalArgumentException("TimeSlot with id: " + timeSlotId + " is occupied");
         } else {
-            delete(old);
+            cleanUp(old);
 
             return create(doctorId, customerId, timeSlotId);
         }
@@ -133,15 +134,11 @@ public class TicketController {
     public ResponseEntity<Boolean> delete(@PathVariable Long id) {
         Ticket ticket = service.getById(id);
 
-        return ResponseEntity.ok(delete(ticket));
-    }
-
-    private boolean delete(Ticket ticket) {
-        timeSlotService.freeTimeSlot(ticket.getTimeSlot());
-        return cleanUp(ticket);
+        return ResponseEntity.ok(cleanUp(ticket));
     }
 
     public boolean cleanUp(Ticket ticket) {
+        timeSlotService.freeTimeSlot(ticket.getTimeSlot());
         customerService.removeTicket(ticket.getCustomer(), ticket);
         doctorService.removeTicket(ticket.getDoctor(), ticket);
         service.archive(ticket);
@@ -149,9 +146,12 @@ public class TicketController {
         return service.delete(ticket.getId());
     }
 
-    public boolean cleanUp(Collection<Ticket> tickets) {
+    public boolean cleanUp(Set<Ticket> tickets) {
         try {
-            tickets.forEach(this::cleanUp);
+            Ticket[] array = tickets.toArray(new Ticket[0]);
+            for (Ticket ticket : array) {
+                cleanUp(ticket);
+            }
             return true;
         } catch (Exception e) {
             throw new ResourceNotFoundException("Ticket not found and can`t be removed.");

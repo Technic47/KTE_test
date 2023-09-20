@@ -35,9 +35,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class CabinetControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    private ObjectMapper om = new ObjectMapper();
 
     @Test
-    @Order(1)
     void indexTest() throws Exception {
         mockMvc.perform(get("/api/users/cabinets"))
                 .andDo(print())
@@ -47,7 +47,6 @@ class CabinetControllerTest {
     }
 
     @Test
-    @Order(2)
     void showTest() throws Exception {
         mockMvc.perform(get("/api/users/cabinets/1"))
                 .andDo(print())
@@ -61,9 +60,14 @@ class CabinetControllerTest {
     }
 
     @Test
-    @Order(3)
+    void showTestError() throws Exception {
+        mockMvc.perform(get("/api/users/cabinets/1111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
     void createTest() throws Exception {
-        ObjectMapper om = new ObjectMapper();
         CabinetDTO newDto = new CabinetDTO(300);
         mockMvc.perform(post("/api/users/cabinets")
                         .content(om.writeValueAsString(newDto))
@@ -78,9 +82,34 @@ class CabinetControllerTest {
     }
 
     @Test
-    @Order(4)
+    void createTestError() throws Exception {
+        CabinetDTO newDtoWrong = new CabinetDTO();
+        mockMvc.perform(post("/api/users/cabinets")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(1)));
+
+        newDtoWrong = new CabinetDTO(-300);
+        mockMvc.perform(post("/api/users/cabinets")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(1)));
+
+        newDtoWrong = new CabinetDTO(200);
+        mockMvc.perform(post("/api/users/cabinets")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(1)));
+
+        mockMvc.perform(get("/api/users/cabinets"))
+                .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
     void updateTest() throws Exception {
-        ObjectMapper om = new ObjectMapper();
         Cabinet newCabinet = new Cabinet(300);
         mockMvc.perform(put("/api/users/cabinets/1")
                 .content(om.writeValueAsString(newCabinet))
@@ -89,9 +118,23 @@ class CabinetControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.number", is(300)));
+    }
 
-        mockMvc.perform(get("/api/users/cabinets/1"))
-                .andExpect(jsonPath("$.number", is(300)));
+    @Test
+    void updateTestError() throws Exception {
+        CabinetDTO newDtoWrong = new CabinetDTO();
+        mockMvc.perform(put("/api/users/cabinets/1")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(1)));
+
+        newDtoWrong = new CabinetDTO(-300);
+        mockMvc.perform(put("/api/users/cabinets/1")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(1)));
     }
 
     @Test
@@ -100,5 +143,12 @@ class CabinetControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
+    }
+
+    @Test
+    void deleteTestError() throws Exception {
+        mockMvc.perform(delete("/api/users/cabinets/1111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

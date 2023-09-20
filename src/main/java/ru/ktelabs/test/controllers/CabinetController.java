@@ -37,6 +37,9 @@ public class CabinetController extends AbstractController<Cabinet, CabinetServic
 
     @Override
     public ResponseEntity<CabinetDTO> create(@RequestBody CabinetDTO newDTO) {
+        if (service.existByNumber(newDTO.getNumber())) {
+            throw new IllegalArgumentException("Cabinet with number: " + newDTO.getNumber() + " already exists!");
+        }
         Cabinet saved = service.save(new Cabinet(newDTO));
         return ResponseEntity.ok(new CabinetDTO(saved));
     }

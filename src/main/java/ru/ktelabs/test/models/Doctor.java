@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
 import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 
@@ -14,8 +16,8 @@ import java.util.*;
 @Entity
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class Doctor extends HumanModel {
-    @NotNull
-    @Max(150)
+    @Size(max = 150)
+    @NotBlank(message = "firstName is mandatory")
     private String speciality;
 
     public Doctor(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate, String speciality) {

@@ -11,11 +11,10 @@ import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.models.dto.TicketDTO;
+import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.services.DoctorService;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Tag(name = "Doctors", description = "The Doctor API")
 @RestController
@@ -23,6 +22,7 @@ import java.util.UUID;
 public class DoctorController extends AbstractController<Doctor, DoctorService, DoctorDTO> {
 
     private final TicketController ticketController;
+
     protected DoctorController(DoctorService service, TicketController ticketController) {
         super(service);
         this.ticketController = ticketController;
@@ -84,5 +84,23 @@ public class DoctorController extends AbstractController<Doctor, DoctorService, 
             return ResponseEntity.ok(service.getTickets(doctorId));
         }
         return ResponseEntity.ok(service.getTickets(uuid));
+    }
+
+    @Operation(summary = "Get TimeSlots by doctorId")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "TimeSlots loaded",
+                    content = @Content),
+            @ApiResponse(responseCode = "403", description = "Access denied",
+                    content = @Content),
+            @ApiResponse(responseCode = "404", description = "Doctor not found",
+                    content = @Content)})
+    @GetMapping("/{id}/slots")
+    public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(
+            @PathVariable Long id,
+            @RequestParam(name = "date", required = false) Calendar date
+    ) {
+        if (date != null) {
+            return ResponseEntity.ok(service.getSlots(id, date));
+        } else return ResponseEntity.ok(service.getAllSlots(id));
     }
 }

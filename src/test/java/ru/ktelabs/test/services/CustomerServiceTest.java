@@ -62,7 +62,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void getSlotsById() {
+    void getAllSlotsById() {
         Long id = 1L;
         Customer customer = new Customer("pavel", "kuznetsov", "andreevich", MALE, new GregorianCalendar());
         Doctor doctor1 = new Doctor("pavel", "kuznetsov", "andreevich", MALE, new GregorianCalendar(), "dentist");
@@ -87,7 +87,7 @@ class CustomerServiceTest {
                 .when(repository)
                 .findById(id);
 
-        List<TimeSlotDTO> slots = service.getSlots(id);
+        List<TimeSlotDTO> slots = service.getAllSlots(id);
 
         verify(repository).findById(id);
 
@@ -96,7 +96,7 @@ class CustomerServiceTest {
     }
 
     @Test
-    void getSlotsUuid() {
+    void getAllSlotsUuid() {
         UUID uuid = UUID.randomUUID();
         Customer customer = new Customer("pavel", "kuznetsov", "andreevich", MALE, new GregorianCalendar());
         Doctor doctor1 = new Doctor("pavel", "kuznetsov", "andreevich", MALE, new GregorianCalendar(), "dentist");
@@ -121,7 +121,7 @@ class CustomerServiceTest {
                 .when(repository)
                 .findByUuid(uuid);
 
-        List<TimeSlotDTO> slots = service.getSlots(uuid);
+        List<TimeSlotDTO> slots = service.getAllSlots(uuid);
 
         verify(repository).findByUuid(uuid);
 

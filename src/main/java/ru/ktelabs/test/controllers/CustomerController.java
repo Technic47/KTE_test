@@ -14,6 +14,7 @@ import ru.ktelabs.test.services.CustomerService;
 import ru.ktelabs.test.services.TicketService;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,6 +23,7 @@ import java.util.UUID;
 @RequestMapping("/api/users/customers")
 public class CustomerController extends AbstractController<Customer, CustomerService, CustomerDTO> {
     private final TicketController ticketController;
+
     protected CustomerController(CustomerService service, TicketController ticketController) {
         super(service);
         this.ticketController = ticketController;
@@ -56,10 +58,25 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
                     content = @Content),
             @ApiResponse(responseCode = "404", description = "Customer not found",
                     content = @Content)})
-    @GetMapping("/{customerId}/slots")
-    public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(@PathVariable Long customerId) {
-        return ResponseEntity.ok(service.getSlots(customerId));
+    @GetMapping("/{id}/slots")
+    public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(
+            @PathVariable Long id,
+            @RequestParam(name = "date", required = false) Calendar date) {
+        return loadSlotsById(id, date);
     }
+
+    private ResponseEntity<List<TimeSlotDTO>> loadSlotsById(Long id, Calendar date) {
+        if (date != null) {
+            return ResponseEntity.ok(service.getSlots(id, date));
+        } else return ResponseEntity.ok(service.getAllSlots(id));
+    }
+
+    private ResponseEntity<List<TimeSlotDTO>> loadSlotsByUuid(UUID uuid, Calendar date) {
+        if (date != null) {
+            return ResponseEntity.ok(service.getSlots(uuid, date));
+        } else return ResponseEntity.ok(service.getAllSlots(uuid));
+    }
+
 
     @Operation(summary = "Get TimeSlots by uuid/customerId")
     @ApiResponses(value = {
@@ -74,14 +91,15 @@ public class CustomerController extends AbstractController<Customer, CustomerSer
     @GetMapping("/slots")
     public ResponseEntity<List<TimeSlotDTO>> getTimeSlots(
             @RequestParam(name = "uuid", required = false) UUID uuid,
-            @RequestParam(name = "customerId", required = false) Long customerId
+            @RequestParam(name = "id", required = false) Long id,
+            @RequestParam(name = "date", required = false) Calendar date
     ) {
         if (uuid == null) {
-            if (customerId == null) {
+            if (id == null) {
                 throw new IllegalArgumentException("Specify at least 1 argument!");
             }
-            return ResponseEntity.ok(service.getSlots(customerId));
+            return loadSlotsById(id, date);
         }
-        return ResponseEntity.ok(service.getSlots(uuid));
+        return loadSlotsByUuid(uuid, date);
     }
 }

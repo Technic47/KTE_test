@@ -33,25 +33,23 @@ import static ru.ktelabs.test.models.Gender.FEMALE;
 @Sql(value = {"/SQL_scripts/create-before.sql"}, executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
 @Sql(value = {"/SQL_scripts/clean-after.sql"}, executionPhase = Sql.ExecutionPhase.AFTER_TEST_METHOD)
 @WithUserDetails("pavel")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class CustomerControllerTest {
     @Autowired
     private MockMvc mockMvc;
+    private ObjectMapper om = new ObjectMapper();
+    private static final String LONG_VALUE = "123456789012345678901234567890123456789012345678901234567890123456789012345678901234567890123456789011";
 
     @Test
-    @Order(1)
     void indexTest() throws Exception {
         mockMvc.perform(get("/api/users/customers"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(4)));
+                .andExpect(jsonPath("$", hasSize(8)));
     }
 
     @Test
-    @Order(2)
     void createTest() throws Exception {
-        ObjectMapper om = new ObjectMapper();
         CustomerDTO newDto = new CustomerDTO("test", "test", "test", FEMALE, new GregorianCalendar(2000, 11, 10));
         mockMvc.perform(post("/api/users/customers")
                         .content(om.writeValueAsString(newDto))
@@ -66,7 +64,50 @@ class CustomerControllerTest {
                 .andExpect(jsonPath("$.birthDate").exists());
 
         mockMvc.perform(get("/api/users/customers"))
-                .andExpect(jsonPath("$", hasSize(5)));
+                .andExpect(jsonPath("$", hasSize(9)));
+    }
+
+    @Test
+    void createTestErrors() throws Exception {
+        CustomerDTO newDtoWrong = new CustomerDTO(LONG_VALUE, LONG_VALUE, LONG_VALUE, null, new GregorianCalendar(2000, 11, 10));
+
+        mockMvc.perform(post("/api/users/customers")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(4)));
+
+        mockMvc.perform(get("/api/users/customers"))
+                .andExpect(jsonPath("$", hasSize(8)));
+    }
+
+    @Test
+    void updateTest() throws Exception {
+        CustomerDTO newDto = new CustomerDTO("test", "test", "test", FEMALE, new GregorianCalendar(2000, 11, 10));
+        mockMvc.perform(put("/api/users/customers/1")
+                        .content(om.writeValueAsString(newDto))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.firstName", is("test")))
+                .andExpect(jsonPath("$.secondName", is("test")))
+                .andExpect(jsonPath("$.givenName", is("test")))
+                .andExpect(jsonPath("$.gender", is("FEMALE")))
+                .andExpect(jsonPath("$.birthDate").exists());
+    }
+
+    @Test
+    void updateTestErrors() throws Exception {
+        CustomerDTO newDtoWrong = new CustomerDTO(LONG_VALUE, LONG_VALUE, LONG_VALUE, null, new GregorianCalendar(2000, 11, 10));
+
+        mockMvc.perform(put("/api/users/customers/1")
+                        .content(om.writeValueAsString(newDtoWrong))
+                        .header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_JSON))
+                .andDo(print())
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errors", hasSize(3)));
     }
 
     @Test
@@ -75,10 +116,23 @@ class CustomerControllerTest {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().string("true"));
+
+        mockMvc.perform(get("/api/users/customers"))
+                .andExpect(jsonPath("$", hasSize(7)));
     }
 
     @Test
-    void getTimeSlots() throws Exception {
+    void deleteTestError() throws Exception{
+        mockMvc.perform(delete("/api/users/customers/1111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/api/users/customers"))
+                .andExpect(jsonPath("$", hasSize(8)));
+    }
+
+    @Test
+    void getTimeSlotsTest() throws Exception {
         mockMvc.perform(get("/api/users/customers/1/slots"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -87,16 +141,31 @@ class CustomerControllerTest {
     }
 
     @Test
-    void testGetTimeSlots() throws Exception {
+    void getTimeSlotsErrorTest() throws Exception {
+        mockMvc.perform(get("/api/users/customers/111/slots"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getTimeSlots2Test() throws Exception {
         mockMvc.perform(get("/api/users/customers/slots")
                         .param("customerId", "1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$", hasSize(2)));
+    }
+
+    @Test
+    void getTimeSlots2TestError() throws Exception {
+        mockMvc.perform(get("/api/users/customers/slots")
+                        .param("customerId", "11111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
 
         mockMvc.perform(get("/api/users/customers/slots"))
                 .andDo(print())
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isBadRequest());
     }
 }

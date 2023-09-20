@@ -5,10 +5,8 @@ import ru.ktelabs.test.models.Ticket;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CommonRepository;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 public abstract class HumanModelService<E extends HumanModel, R extends CommonRepository<E>>
         extends AbstractService<E, R> {
@@ -56,7 +54,21 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
         return save(human);
     }
 
-    protected List<TimeSlotDTO> getSlotsFromModel(HumanModel model) {
+    protected List<TimeSlotDTO> getSlotsFromModel(HumanModel model, Calendar date) {
+        Calendar finish = new GregorianCalendar(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+        finish.set(Calendar.HOUR, 23);
+        finish.set(Calendar.MINUTE, 59);
+        List<TimeSlotDTO> dtoList = new ArrayList<>();
+        Set<Ticket> tickets = model.getTickets()
+                .stream()
+                .filter(ticket -> ticket.getTimeSlot().getStartTime().after(date))
+                .filter(ticket -> ticket.getTimeSlot().getStartTime().before(finish))
+                .collect(Collectors.toSet());
+        tickets.forEach(ticket -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(ticket.getTimeSlot())));
+        return dtoList;
+    }
+
+    protected List<TimeSlotDTO> getAllSlotsFromModel(HumanModel model) {
         List<TimeSlotDTO> dtoList = new ArrayList<>();
         Set<Ticket> tickets = model.getTickets();
         tickets.forEach(ticket -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(ticket.getTimeSlot())));

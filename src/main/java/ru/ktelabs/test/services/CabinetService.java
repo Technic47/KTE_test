@@ -38,29 +38,28 @@ public class CabinetService extends AbstractService<Cabinet, CabinetRepository> 
         } else return result.get();
     }
 
-    public Cabinet setSlots(int number, Collection<TimeSlot> slots){
-        Cabinet cabinet = findByNumber(number);
+    /**
+     * Check existence of Cabinet by int number.
+     *
+     * @param number number to check.
+     * @return boolean result.
+     */
+    public boolean existByNumber(int number) {
+        return repository.existsByNumber(number);
+    }
+
+    public Cabinet setSlots(Cabinet cabinet, Collection<TimeSlot> slots) {
         cabinet.setTimeslots(new HashSet<>(slots));
         return save(cabinet);
     }
 
-    public Cabinet setSlots(Cabinet cabinet, Collection<TimeSlot> slots){
-        cabinet.setTimeslots(new HashSet<>(slots));
-        return save(cabinet);
-    }
-
-    public Cabinet addSlot(int number, TimeSlot slot){
+    public Cabinet addSlot(int number, TimeSlot slot) {
         Cabinet cabinet = findByNumber(number);
         cabinet.getTimeslots().add(slot);
         return save(cabinet);
     }
 
-    public Cabinet removeSlot(int number, TimeSlot slot){
-        Cabinet cabinet = findByNumber(number);
-        cabinet.getTimeslots().remove(slot);
-        return save(cabinet);
-    }
-    public void removeSlot(Cabinet cabinet, TimeSlot slot){
+    public void removeSlot(Cabinet cabinet, TimeSlot slot) {
         Set<TimeSlot> timeslots = cabinet.getTimeslots();
         timeslots.remove(slot);
         save(cabinet);
