@@ -10,7 +10,7 @@ import java.util.*;
 import static ru.ktelabs.test.models.Gender.UNKNOWN;
 
 @MappedSuperclass
-public abstract class HumanModel extends AbstractEntity implements TicketHandler {
+public abstract class HumanModel extends AbstractEntity implements TicketHandler, DTOCreator {
     @Size(max = 100)
     @NotBlank(message = "firstName is mandatory")
     protected String firstName;

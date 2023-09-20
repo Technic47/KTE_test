@@ -6,7 +6,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import ru.ktelabs.test.models.*;
 import ru.ktelabs.test.models.dto.TicketDTO;
-import ru.ktelabs.test.repositories.CustomerRepository;
 import ru.ktelabs.test.repositories.DoctorRepository;
 
 import java.util.*;
@@ -93,7 +92,7 @@ class DoctorServiceTest {
                 .when(repository)
                 .findById(id);
 
-        List<TicketDTO> ticketList = service.getTickets(id);
+        List<TicketDTO> ticketList = service.getAllTickets(id);
 
         verify(repository).findById(id);
 
@@ -127,7 +126,7 @@ class DoctorServiceTest {
                 .when(repository)
                 .findByUuid(uuid);
 
-        List<TicketDTO> ticketList = service.getTickets(uuid);
+        List<TicketDTO> ticketList = service.getAllTickets(uuid);
 
         verify(repository).findByUuid(uuid);
 

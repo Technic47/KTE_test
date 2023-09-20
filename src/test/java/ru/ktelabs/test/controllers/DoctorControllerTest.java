@@ -75,9 +75,9 @@ class DoctorControllerTest {
     }
 
     @Test
-    void getTicketsByIdSlots() throws Exception {
+    void getTicketsById() throws Exception {
         mockMvc.perform(get("/api/users/doctors/tickets")
-                        .param("doctorId", "1"))
+                        .param("id", "1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -86,5 +86,43 @@ class DoctorControllerTest {
         mockMvc.perform(get("/api/users/doctors/tickets"))
                 .andDo(print())
                 .andExpect(status().is4xxClientError());
+    }
+
+    @Test
+    void getTimeSlotsTest() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/1/slots"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(6)));
+    }
+
+    @Test
+    void getTimeSlotsTestError() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/111/slots"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void getTimeSlots2Test() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/slots")
+                        .param("id", "1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(6)));
+    }
+
+    @Test
+    void getTimeSlots2TestError() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/slots")
+                        .param("id", "11111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+
+        mockMvc.perform(get("/api/users/doctors/slots"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 }

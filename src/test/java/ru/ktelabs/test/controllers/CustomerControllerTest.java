@@ -141,7 +141,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void getTimeSlotsErrorTest() throws Exception {
+    void getTimeSlotsTestError() throws Exception {
         mockMvc.perform(get("/api/users/customers/111/slots"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
@@ -150,7 +150,7 @@ class CustomerControllerTest {
     @Test
     void getTimeSlots2Test() throws Exception {
         mockMvc.perform(get("/api/users/customers/slots")
-                        .param("customerId", "1"))
+                        .param("id", "1"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -160,7 +160,7 @@ class CustomerControllerTest {
     @Test
     void getTimeSlots2TestError() throws Exception {
         mockMvc.perform(get("/api/users/customers/slots")
-                        .param("customerId", "11111"))
+                        .param("id", "11111"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 

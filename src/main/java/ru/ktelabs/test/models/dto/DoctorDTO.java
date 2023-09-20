@@ -11,27 +11,13 @@ import jakarta.validation.constraints.Past;
 import jakarta.validation.constraints.Size;
 import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Gender;
+import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.builders.DoctorDTOBuilder;
 
 import java.util.Calendar;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class DoctorDTO extends AbstractDto {
-    @NotNull
-    @Size(max = 100)
-    private String firstName;
-    @NotNull
-    @Size(max = 100)
-    private String secondName;
-    @Size(max = 100)
-    private String givenName;
-    @NotNull
-    @JsonProperty(value = "gender")
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    @Past
-    @JsonFormat(pattern = "yyyy-MM-DD")
-    private Calendar birthDate;
+public class DoctorDTO extends HumanModelDTO {
     @NotNull
     @Size(max = 150)
     private String speciality;
@@ -58,6 +44,11 @@ public class DoctorDTO extends AbstractDto {
                 .setBirthDate(doctor.getBirthDate())
                 .setSpeciality(doctor.getSpeciality())
                 .createDoctorDTO();
+    }
+
+    @Override
+    public Doctor createHuman() {
+        return new Doctor(this);
     }
 
     public String getFirstName() {

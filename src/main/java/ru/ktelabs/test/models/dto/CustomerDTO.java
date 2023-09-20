@@ -5,21 +5,15 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import ru.ktelabs.test.models.Customer;
+import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.Gender;
+import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.builders.CustomerDTOBuilder;
 
 import java.util.Calendar;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class CustomerDTO extends AbstractDto {
-    private String firstName;
-    private String secondName;
-    private String givenName;
-    @JsonProperty(value = "gender")
-    @Enumerated(EnumType.STRING)
-    private Gender gender;
-    private Calendar birthDate;
-
+public class CustomerDTO extends HumanModelDTO {
     public CustomerDTO(String firstName, String secondName, String givenName, Gender gender, Calendar birthDate) {
         this.firstName = firstName;
         this.secondName = secondName;
@@ -41,6 +35,11 @@ public class CustomerDTO extends AbstractDto {
                 .createCustomerDTO();
     }
 
+    @Override
+    public Customer createHuman() {
+        return new Customer(this);
+    }
+
     public String getFirstName() {
         return firstName;
     }
@@ -60,4 +59,6 @@ public class CustomerDTO extends AbstractDto {
     public Calendar getBirthDate() {
         return birthDate;
     }
+
+
 }

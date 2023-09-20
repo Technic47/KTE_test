@@ -2,6 +2,7 @@ package ru.ktelabs.test.services;
 
 import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.Ticket;
+import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
 import ru.ktelabs.test.repositories.CommonRepository;
 
@@ -9,7 +10,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class HumanModelService<E extends HumanModel, R extends CommonRepository<E>>
-        extends AbstractService<E, R> {
+        extends AbstractService<E, R> implements ExtendedService<E> {
     public HumanModelService(R repository) {
         super(repository);
     }
@@ -54,7 +55,82 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
         return save(human);
     }
 
-    protected List<TimeSlotDTO> getSlotsFromModel(HumanModel model, Calendar date) {
+    /**
+     * Get all Tickets assigned to specified human.
+     *
+     * @param id id of the human.
+     * @return List of TicketDTO.
+     */
+    public List<TicketDTO> getAllTickets(Long id) {
+        E human = getById(id);
+        List<TicketDTO> dtoList = new ArrayList<>();
+        human.getTickets().forEach(item -> dtoList.add(new TicketDTO(item)));
+        return dtoList;
+    }
+
+    /**
+     * Get all Tickets assigned to specified human.
+     *
+     * @param uuid uuid of the human.
+     * @return List of TicketDTO.
+     */
+
+    public List<TicketDTO> getAllTickets(UUID uuid) {
+        E human = getByUuid(uuid);
+        List<TicketDTO> dtoList = new ArrayList<>();
+        human.getTickets().forEach(item -> dtoList.add(new TicketDTO(item)));
+        return dtoList;
+    }
+
+    /**
+     * Get slots for specified human and date.
+     *
+     * @param id id of human.
+     * @return List of TimeSlots.
+     */
+    public List<TimeSlotDTO> getSlots(Long id, Calendar date) {
+        E human = getById(id);
+
+        return getSlotsFromModel(human, date);
+    }
+
+    /**
+     * Get slots for specified human and date.
+     *
+     * @param uuid uuid of human.
+     * @return List of TimeSlots.
+     */
+    public List<TimeSlotDTO> getSlots(UUID uuid, Calendar date) {
+        E human = getByUuid(uuid);
+
+        return getSlotsFromModel(human, date);
+    }
+
+    /**
+     * Get all slots for specified human.
+     *
+     * @param id id of human.
+     * @return List of TimeSlots.
+     */
+    public List<TimeSlotDTO> getAllSlots(Long id) {
+        E human = getById(id);
+
+        return getAllSlotsFromModel(human);
+    }
+
+    /**
+     * Get all slots for specified human.
+     *
+     * @param uuid uuid of human.
+     * @return List of TimeSlots.
+     */
+    public List<TimeSlotDTO> getAllSlots(UUID uuid) {
+        E human = getByUuid(uuid);
+
+        return getAllSlotsFromModel(human);
+    }
+
+    private List<TimeSlotDTO> getSlotsFromModel(HumanModel model, Calendar date) {
         Calendar finish = new GregorianCalendar(date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
         finish.set(Calendar.HOUR, 23);
         finish.set(Calendar.MINUTE, 59);
@@ -68,7 +144,7 @@ public abstract class HumanModelService<E extends HumanModel, R extends CommonRe
         return dtoList;
     }
 
-    protected List<TimeSlotDTO> getAllSlotsFromModel(HumanModel model) {
+    private List<TimeSlotDTO> getAllSlotsFromModel(HumanModel model) {
         List<TimeSlotDTO> dtoList = new ArrayList<>();
         Set<Ticket> tickets = model.getTickets();
         tickets.forEach(ticket -> dtoList.add(TimeSlotDTO.createTimeSlotDTO(ticket.getTimeSlot())));

@@ -1,11 +1,13 @@
 package ru.ktelabs.test.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.AbstractEntity;
 import ru.ktelabs.test.repositories.CommonRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
         implements CommonService<E> {
