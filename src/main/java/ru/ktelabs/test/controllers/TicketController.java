@@ -10,16 +10,20 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.ktelabs.test.customExceptions.ResourceNotFoundException;
 import ru.ktelabs.test.models.*;
+import ru.ktelabs.test.models.dto.AbstractDto;
 import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.services.CustomerService;
 import ru.ktelabs.test.services.DoctorService;
 import ru.ktelabs.test.services.TicketService;
 import ru.ktelabs.test.services.TimeSlotService;
 
-import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Controller for Ticket API.
+ * Provides access to archive tickets.
+ */
 @Tag(name = "Tickets", description = "The Ticket API")
 @RestController
 @RequestMapping("/api/users/tickets")
@@ -156,5 +160,39 @@ public class TicketController {
         } catch (Exception e) {
             throw new ResourceNotFoundException("Ticket not found and can`t be removed.");
         }
+    }
+
+    @Operation(summary = "Get all archiveTickets")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Index is ok",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArchiveTicket.class))})})
+    @GetMapping("/archive")
+    public ResponseEntity<List<ArchiveTicket>> archiveIndex() {
+        return ResponseEntity.ok(service.indexArchive());
+    }
+
+    @Operation(summary = "Get archiveTicket by it`s id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ArchiveTicket is found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArchiveTicket.class))}),
+            @ApiResponse(responseCode = "404", description = "ArchiveTicket not found",
+                    content = @Content)})
+    @GetMapping("/archive/{id}")
+    public ResponseEntity<ArchiveTicket> getArchiveTicket(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getArchiveById(id));
+    }
+
+    @Operation(summary = "Get archiveTicket by old Ticket`s id")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "ArchiveTicket is found",
+                    content = {@Content(mediaType = "application/json",
+                            schema = @Schema(implementation = ArchiveTicket.class))}),
+            @ApiResponse(responseCode = "404", description = "ArchiveTicket not found",
+                    content = @Content)})
+    @GetMapping("/archive/oldId/{id}")
+    public ResponseEntity<ArchiveTicket> getArchiveTicketByOldId(@PathVariable Long id) {
+        return ResponseEntity.ok(service.getArchiveByTicketId(id));
     }
 }

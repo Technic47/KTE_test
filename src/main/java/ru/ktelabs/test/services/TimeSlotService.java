@@ -15,6 +15,9 @@ import java.util.concurrent.ExecutorService;
 
 import static java.util.Calendar.*;
 
+/**
+ * Service providing methods for TimeSlot model.
+ */
 @Service
 public class TimeSlotService extends AbstractService<TimeSlot, TimeSlotRepository> {
     private static int WORKING_HOURS_START = 9;

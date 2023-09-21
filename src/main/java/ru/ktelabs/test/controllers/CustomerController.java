@@ -7,6 +7,9 @@ import ru.ktelabs.test.models.Customer;
 import ru.ktelabs.test.models.dto.CustomerDTO;
 import ru.ktelabs.test.services.CustomerService;
 
+/**
+ * Controller for Customer API.
+ */
 @Tag(name = "Customers", description = "The Customer API")
 @RestController
 @RequestMapping("/api/users/customers")

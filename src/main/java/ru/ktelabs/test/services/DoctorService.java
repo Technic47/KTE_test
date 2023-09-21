@@ -13,6 +13,9 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Service providing methods for Doctor model.
+ */
 @Service
 public class DoctorService extends HumanModelService<Doctor, DoctorRepository> {
     public DoctorService(DoctorRepository repository) {

@@ -17,6 +17,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Abstract controller for main common methods used in model`s services.
+ *
+ * @param <E> any inheritor of AbstractEntity.
+ * @param <S> service for model.
+ * @param <T> dto for model.
+ */
 public abstract class AbstractController<
         E extends AbstractEntity,
         S extends CommonService<E>,
@@ -71,7 +78,7 @@ public abstract class AbstractController<
                     content = @Content)})
     @PutMapping("/{id}")
     public ResponseEntity<AbstractDto> update(@PathVariable Long id,
-                                    @RequestBody E newItem) {
+                                              @RequestBody E newItem) {
         E old = service.getById(id);
         E updated = service.update(old, newItem);
         return ResponseEntity.ok(updated.createDTO());

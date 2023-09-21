@@ -10,6 +10,9 @@ import ru.ktelabs.test.models.builders.ArchiveTicketBuilder;
 import java.util.Calendar;
 import java.util.UUID;
 
+/**
+ * Entity for saving data from tickets before their removal.
+ */
 @Entity
 public class ArchiveTicket {
     @Id

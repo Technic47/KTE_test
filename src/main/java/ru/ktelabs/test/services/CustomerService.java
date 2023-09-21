@@ -7,6 +7,9 @@ import ru.ktelabs.test.repositories.CustomerRepository;
 
 import java.util.*;
 
+/**
+ * Service providing methods for Customer model.
+ */
 @Service
 public class CustomerService extends HumanModelService<Customer, CustomerRepository> {
     public CustomerService(CustomerRepository repository) {

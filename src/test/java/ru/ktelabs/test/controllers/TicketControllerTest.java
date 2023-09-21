@@ -125,6 +125,59 @@ class TicketControllerTest {
                 .andExpect(content().string("true"));
 
         mockMvc.perform(delete("/api/users/tickets/111"))
-                .andExpect(status().is4xxClientError());
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void archiveIndexTest() throws Exception{
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users/tickets/archive"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    void archiveGetTest() throws Exception{
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users/tickets/archive/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id", is(1)));
+    }
+
+    @Test
+    void archiveGetTestError() throws Exception{
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users/tickets/archive/1111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void archiveGetByOldIdTest() throws Exception{
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users/tickets/archive/oldId/1"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.oldId", is(1)));
+    }
+
+    @Test
+    void archiveGetByOldIdTestError() throws Exception{
+        mockMvc.perform(delete("/api/users/tickets/1"))
+                .andExpect(status().isOk());
+
+        mockMvc.perform(get("/api/users/tickets/archive/oldId/1111"))
+                .andDo(print())
+                .andExpect(status().isNotFound());
     }
 }

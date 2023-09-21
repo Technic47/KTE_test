@@ -12,6 +12,9 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * Service providing methods for Cabinet model.
+ */
 @Service
 public class CabinetService extends AbstractService<Cabinet, CabinetRepository> {
     public CabinetService(CabinetRepository repository) {

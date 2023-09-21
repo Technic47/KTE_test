@@ -53,6 +53,12 @@ public class UserModel extends AbstractEntity implements UserDetails {
         this.password = password;
     }
 
+    public UserModel(String username, String email, String password) {
+        this.username = username;
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public AbstractDto createDTO() {
         return null;

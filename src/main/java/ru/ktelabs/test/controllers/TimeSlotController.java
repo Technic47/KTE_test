@@ -21,7 +21,9 @@ import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-
+/**
+ * Controller for TimeSlot API.
+ */
 @Tag(name = "TimeSlots", description = "The TimeSlot API")
 @RestController
 @RequestMapping("/api/users/timeSlots")

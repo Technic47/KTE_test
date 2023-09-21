@@ -7,6 +7,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import ru.ktelabs.test.models.users.UserModel;
 
+/**
+ * Service for authorisation of users.
+ */
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     private final UserService userService;
@@ -27,16 +30,15 @@ public class CustomUserDetailsService implements UserDetailsService {
     /**
      * Find user by email and return if it is present.
      *
-     * @param userEmail email to search
+     * @param userName email to search
      * @return UserDetails object
      * @throws UsernameNotFoundException
      */
     @Override
-    public UserModel loadUserByUsername(String userEmail) throws RuntimeException {
-        UserModel user = userService.findByUsernameOrNull(userEmail);
+    public UserModel loadUserByUsername(String userName) throws RuntimeException {
+        UserModel user = userService.findByUsernameOrNull(userName);
         if (user == null) {
-            throw new UsernameNotFoundException(
-                    "User not found: " + userEmail);
+            throw new UsernameNotFoundException("User not found: " + userName);
         }
         return user;
     }

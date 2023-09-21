@@ -13,13 +13,20 @@ import ru.ktelabs.test.models.HumanModel;
 import ru.ktelabs.test.models.dto.HumanModelDTO;
 import ru.ktelabs.test.models.dto.TicketDTO;
 import ru.ktelabs.test.models.dto.TimeSlotDTO;
-import ru.ktelabs.test.services.ExtendedService;
+import ru.ktelabs.test.services.HumanModelInterface;
 
 import java.util.*;
 
+/**
+ * Common controller for Customer and Doctor model`s API.
+ *
+ * @param <E> HumanModel inheritors.
+ * @param <S> service for model E.
+ * @param <T> dto class for model E.
+ */
 public abstract class HumanModelController<
         E extends HumanModel,
-        S extends ExtendedService<E>,
+        S extends HumanModelInterface<E>,
         T extends HumanModelDTO
         > extends AbstractController<E, S, T> {
     private final TicketController ticketController;

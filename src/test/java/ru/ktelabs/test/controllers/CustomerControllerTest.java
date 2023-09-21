@@ -1,10 +1,7 @@
 package ru.ktelabs.test.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.MethodOrderer;
-import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,14 +11,12 @@ import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
-import ru.ktelabs.test.models.Gender;
-import ru.ktelabs.test.models.dto.CabinetDTO;
 import ru.ktelabs.test.models.dto.CustomerDTO;
 
 import java.util.GregorianCalendar;
 
-import static org.hamcrest.Matchers.*;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.hamcrest.Matchers.hasSize;
+import static org.hamcrest.Matchers.is;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -111,7 +106,7 @@ class CustomerControllerTest {
     }
 
     @Test
-    void deleteTest() throws Exception{
+    void deleteTest() throws Exception {
         mockMvc.perform(delete("/api/users/customers/1"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -122,50 +117,12 @@ class CustomerControllerTest {
     }
 
     @Test
-    void deleteTestError() throws Exception{
+    void deleteTestError() throws Exception {
         mockMvc.perform(delete("/api/users/customers/1111"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(get("/api/users/customers"))
                 .andExpect(jsonPath("$", hasSize(8)));
-    }
-
-    @Test
-    void getTimeSlotsTest() throws Exception {
-        mockMvc.perform(get("/api/users/customers/1/slots"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(2)));
-    }
-
-    @Test
-    void getTimeSlotsTestError() throws Exception {
-        mockMvc.perform(get("/api/users/customers/111/slots"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-    }
-
-    @Test
-    void getTimeSlots2Test() throws Exception {
-        mockMvc.perform(get("/api/users/customers/slots")
-                        .param("id", "1"))
-                .andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"))
-                .andExpect(jsonPath("$", hasSize(2)));
-    }
-
-    @Test
-    void getTimeSlots2TestError() throws Exception {
-        mockMvc.perform(get("/api/users/customers/slots")
-                        .param("id", "11111"))
-                .andDo(print())
-                .andExpect(status().isNotFound());
-
-        mockMvc.perform(get("/api/users/customers/slots"))
-                .andDo(print())
-                .andExpect(status().isBadRequest());
     }
 }

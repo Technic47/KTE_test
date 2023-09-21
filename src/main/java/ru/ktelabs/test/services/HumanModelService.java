@@ -9,8 +9,14 @@ import ru.ktelabs.test.repositories.CommonRepository;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Service providing special methods for Customer and Doctor models.
+ *
+ * @param <E> Model class.
+ * @param <R> Repository of model.
+ */
 public abstract class HumanModelService<E extends HumanModel, R extends CommonRepository<E>>
-        extends AbstractService<E, R> implements ExtendedService<E> {
+        extends AbstractService<E, R> implements HumanModelInterface<E> {
     public HumanModelService(R repository) {
         super(repository);
     }

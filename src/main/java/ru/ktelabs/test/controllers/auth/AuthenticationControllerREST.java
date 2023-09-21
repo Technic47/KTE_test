@@ -53,10 +53,6 @@ public class AuthenticationControllerREST {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, requestDto.getPassword()));
             UserModel user = userService.loadUserByUsername(username);
 
-            if (user == null) {
-                throw new UsernameNotFoundException("User with username: " + username + " not found");
-            }
-
             String token = jwtTokenProvider.createToken(username, user.getAuthorities());
 
             Map<Object, Object> response = new HashMap<>();

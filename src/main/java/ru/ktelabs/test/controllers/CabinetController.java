@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Controller for Cabinet API.
+ */
 @Tag(name = "Cabinets", description = "The Cabinet API")
 @RestController
 @RequestMapping("/api/users/cabinets")

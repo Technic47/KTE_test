@@ -66,7 +66,7 @@ class DoctorControllerTest {
     }
 
     @Test
-    void getTickets() throws Exception {
+    void getTicketsTest() throws Exception {
         mockMvc.perform(get("/api/users/doctors/1/tickets"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -75,7 +75,7 @@ class DoctorControllerTest {
     }
 
     @Test
-    void getTicketsById() throws Exception {
+    void getTicketsByIdTest() throws Exception {
         mockMvc.perform(get("/api/users/doctors/tickets")
                         .param("id", "1"))
                 .andDo(print())
@@ -122,6 +122,40 @@ class DoctorControllerTest {
                 .andExpect(status().isNotFound());
 
         mockMvc.perform(get("/api/users/doctors/slots"))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    void getTimeSlotsForDateTest() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/1/slots")
+                        .param("year", "2023")
+                        .param("month", "10")
+                        .param("day", "17"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    void getTimeSlotsForDate2Test() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/slots")
+                        .param("id", "1")
+                        .param("year", "2023")
+                        .param("month", "10")
+                        .param("day", "17"))
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$", hasSize(1)));
+    }
+
+    @Test
+    void getTicketsForDateTestError() throws Exception {
+        mockMvc.perform(get("/api/users/doctors/1/slots")
+                        .param("year", "2023")
+                        .param("day", "17"))
                 .andDo(print())
                 .andExpect(status().isBadRequest());
     }

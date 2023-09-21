@@ -8,6 +8,7 @@ TRUNCATE ticket RESTART IDENTITY CASCADE;
 TRUNCATE time_slot RESTART IDENTITY CASCADE;
 TRUNCATE user_model RESTART IDENTITY CASCADE;
 TRUNCATE user_role RESTART IDENTITY CASCADE;
+TRUNCATE archive_ticket RESTART IDENTITY CASCADE;
 
 INSERT INTO cabinet (id, uuid, number)
 VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), 100),
@@ -56,10 +57,10 @@ VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)
 INSERT INTO user_model (id, uuid, active, created, email, enabled, password, updated, username)
 VALUES (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email@mail.il',
         true,
-        'pass', '2023-06-20', 'pavel'),
+        '$2a$12$yuKW.5Pau3wpKyarGWaYV.N6V8kSGX.Y5hE.aUlaxC4DX/NRH7K8S', '2023-06-20', 'pavel'),
        (DEFAULT, (SELECT uuid_in(md5(random()::text || random()::text)::cstring)), true, '1990-06-20', 'email2@mail.il',
         true,
-        'pass', '2023-06-20', 'user');
+        '$2a$12$yuKW.5Pau3wpKyarGWaYV.N6V8kSGX.Y5hE.aUlaxC4DX/NRH7K8S', '2023-06-20', 'user');
 
 INSERT INTO user_role (user_id, status)
 VALUES (1, 'ROLE_ADMIN'),
@@ -78,8 +79,8 @@ VALUES (DEFAULT, 'b656f70d-606c-4e1f-a093-8c1f0120feb8', '2023-10-16 09:30:00', 
         '2023-10-16 11:00:00', 1),
        (DEFAULT, 'c63edc74-1ec3-44f9-9567-954edfaca725', '2023-10-16 12:00:00', true,
         '2023-10-16 11:30:00', 2),
-       (DEFAULT, 'c3b1b774-598f-4282-a32b-6d1d3d67f6ba', '2023-10-16 12:30:00', true,
-        '2023-10-16 12:00:00', 1),
+       (DEFAULT, 'c3b1b774-598f-4282-a32b-6d1d3d67f6ba', '2023-10-17 12:30:00', true,
+        '2023-10-17 12:00:00', 1),
        (DEFAULT, 'a4218336-cc87-4f16-8110-283fe26474fd', '2023-10-16 13:00:00', false,
         '2023-10-16 12:30:00', 2),
        (DEFAULT, '2e55acc7-b265-4a83-9380-353f13f29161', '2023-10-16 13:30:00', false,

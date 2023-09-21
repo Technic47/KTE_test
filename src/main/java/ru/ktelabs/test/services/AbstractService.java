@@ -9,6 +9,12 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Abstract service for main common methods used in models.
+ *
+ * @param <E> any inheritor of AbstractEntity.
+ * @param <R> repository for model.
+ */
 public abstract class AbstractService<E extends AbstractEntity, R extends CommonRepository<E>>
         implements CommonService<E> {
     protected final R repository;

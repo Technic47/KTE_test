@@ -15,6 +15,10 @@ import java.util.List;
 import static ru.ktelabs.test.models.users.UserRole.ROLE_ADMIN;
 import static ru.ktelabs.test.models.users.UserRole.ROLE_USER;
 
+/**
+ * Service providing methods for UserModel.
+ * Provides main User registration logic.
+ */
 @Service
 public class UserService {
     private final UserRepository repository;
@@ -23,10 +27,6 @@ public class UserService {
     public UserService(UserRepository repository, PasswordEncoder passwordEncoder) {
         this.repository = repository;
         this.passwordEncoder = passwordEncoder;
-    }
-
-    public UserModel createUser(RegistrationRequestDto dto) {
-        return this.registerNewUserAccount(dto.toUserModel());
     }
 
     /**
@@ -68,23 +68,23 @@ public class UserService {
         return repository.findByUsername(username);
     }
 
-    public UserModel findByEmailOrNull(String email) {
-        return this.repository.findByEmail(email);
-    }
+//    public UserModel findByEmailOrNull(String email) {
+//        return this.repository.findByEmail(email);
+//    }
 
     private boolean emailExist(String email) {
         return repository.findByEmail(email) != null;
     }
 
-    /**
-     * Find user records containing argument username in username field.
-     *
-     * @param username search value
-     * @return list of matching records.
-     */
-    public List<UserModel> findByUsernameContainingIgnoreCase(String username) {
-        return repository.findByUsernameContainingIgnoreCase(username);
-    }
+//    /**
+//     * Find user records containing argument username in username field.
+//     *
+//     * @param username search value
+//     * @return list of matching records.
+//     */
+//    public List<UserModel> findByUsernameContainingIgnoreCase(String username) {
+//        return repository.findByUsernameContainingIgnoreCase(username);
+//    }
 
     /**
      * Adds admin role to user.
@@ -129,21 +129,6 @@ public class UserService {
         }
         oldItem.setUpdated(new Date());
         return repository.save(oldItem);
-    }
-
-    /**
-     * Create user with ROLE_USER.
-     *
-     * @param userModel prepared user record.
-     * @return false if user already exists.
-     */
-    public UserModel registerNewUserAccount(UserModel userModel) throws RuntimeException {
-        if (emailExist(userModel.getEmail())) {
-            throw new RuntimeException(
-                    "В системе уже существует аккаунт с почтой: "
-                            + userModel.getEmail());
-        }
-        return this.constructRecordAndSave(userModel, ROLE_USER);
     }
 
     /**

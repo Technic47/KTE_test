@@ -7,6 +7,9 @@ import ru.ktelabs.test.models.Doctor;
 import ru.ktelabs.test.models.dto.DoctorDTO;
 import ru.ktelabs.test.services.DoctorService;
 
+/**
+ * Controller for Doctor API.
+ */
 @Tag(name = "Doctors", description = "The Doctor API")
 @RestController
 @RequestMapping("/api/users/doctors")

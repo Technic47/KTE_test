@@ -5,6 +5,10 @@ import ru.ktelabs.test.models.AbstractEntity;
 import java.util.List;
 import java.util.UUID;
 
+/**
+ * Contracts for main common services.
+ * @param <E>
+ */
 public interface CommonService<E extends AbstractEntity> {
     List<E> index();
     E save(E newItem);
